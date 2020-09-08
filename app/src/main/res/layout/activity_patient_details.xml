@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PatientDetails">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/patientdetailappbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#ffffff">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="10dp"
+            android:onClick="close"
+            android:src="@drawable/back_icon" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/titlename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/medium"
+            android:text="Patient Name"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/patientdetailappbar"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/user_icon" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/Pname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/Page"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/regular"
+                    android:text="Patient Name"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/Page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/light"
+                    android:text="Age"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/PlastDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/Page"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/light"
+                    android:text="Last Date Of Visit"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <ImageButton
+                    android:id="@+id/newbillbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@color/colorWhite"
+                    android:src="@drawable/add_box_icon" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/newbillbtn"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/light"
+                    android:text="New Bill"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medicine" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disease" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Debts" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
