@@ -2,6 +2,7 @@ package com.kernel.firstmed;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,14 +14,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
     public void SearchPatient(View view) {
-     //   startActivity(new Intent(this, SearchPatient.class));
+        startActivity(new Intent(this, SearchPatient.class));
     }
-
-    public void patientData(View view) {
-       // startActivity(new Intent(this, PatientData.class));
-    }
-
     public void AddPatient(View view) {
-        //startActivity(new Intent(this, AddPatient.class));
+        startActivity(new Intent(this, AddPatient.class));
+    }
+    public void PatientData(View view) {
+        // startActivity(new Intent(this, PatientData.class));
     }
 }
