@@ -251,7 +251,11 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="8dp">
+            app:cardElevation="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="Prescription">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -306,7 +310,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/user_data_icon" />
+                    android:src="@drawable/medicine_data_icon" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
@@ -314,10 +318,11 @@
                     android:layout_below="@id/bb"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/regular"
-                    android:text="Patient Data"
+                    android:text="Medicine Data"
                     android:textAlignment="center"
                     android:textColor="@color/colorBlack" />
             </RelativeLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
@@ -345,7 +350,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/medicine_data_icon" />
+                    android:src="@drawable/backup_icon" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
@@ -353,7 +358,7 @@
                     android:layout_below="@id/ca"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/regular"
-                    android:text="Medicine Data"
+                    android:text="Backup Data"
                     android:textAlignment="center"
                     android:textColor="@color/colorBlack" />
             </RelativeLayout>

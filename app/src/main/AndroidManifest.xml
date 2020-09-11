@@ -10,10 +10,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewBill"></activity>
+        <activity
+            android:name=".PrescriptionActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".NewBill"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PatientDetails" />
-        <activity android:name=".AddPatient" />
-        <activity android:name=".SearchPatient" />
+        <activity
+            android:name=".AddPatient"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".SearchPatient"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"

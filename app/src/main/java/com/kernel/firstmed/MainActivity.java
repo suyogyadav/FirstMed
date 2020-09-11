@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     public void AddPatient(View view) {
         startActivity(new Intent(this, AddPatient.class));
     }
-    public void PatientData(View view) {
-        // startActivity(new Intent(this, PatientData.class));
+    public void Prescription(View view) {
+        startActivity(new Intent(this, PrescriptionActivity.class));
     }
 }
