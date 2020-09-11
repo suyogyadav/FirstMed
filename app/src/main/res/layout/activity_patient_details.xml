@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/Page"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:fontFamily="@font/regular"
                     android:text="Patient Name"
                     android:textColor="@color/colorBlack"
@@ -78,24 +78,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/light"
                     android:text="Age"
                     android:textColor="@color/colorBlack"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/PlastDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/Page"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/light"
                     android:text="Last Date Of Visit"
                     android:textColor="@color/colorBlack"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
 
             </RelativeLayout>
 
@@ -110,7 +110,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:background="@color/colorWhite"
-                    android:src="@drawable/add_box_icon" />
+                    android:src="@drawable/add_box_icon"
+                    android:onClick="NewBill"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -128,7 +129,8 @@
 
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="0.7">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -144,6 +146,12 @@
                 android:text="Debts" />
 
         </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewcontainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7.3" />
 
     </LinearLayout>
 

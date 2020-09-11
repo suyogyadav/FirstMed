@@ -2,6 +2,7 @@ package com.kernel.firstmed;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,5 +19,6 @@ public class AddPatient extends AppCompatActivity {
     }
 
     public void submitBtn(View view) {
+        startActivity(new Intent(this,PatientDetails.class));
     }
 }
