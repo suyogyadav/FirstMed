@@ -36,10 +36,6 @@ public class PatientDetails extends AppCompatActivity {
         }
     }
 
-    private void oldPatient(long rowId) {
-
-    }
-
     private void newPatient(long rowId) {
         FirstMedDatabase db = new FirstMedDatabase(this);
         PatientPOJO patient = db.getSinglePatient(rowId);
@@ -54,11 +50,17 @@ public class PatientDetails extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
     }
 
+    private void oldPatient(long rowId) {
+
+    }
+
     public void close(View view) {
         finish();
     }
 
     public void NewBill(View view) {
-        startActivity(new Intent(this, NewBill.class));
+        Intent intent = new Intent(this,NewBill.class);
+        intent.putExtra("rowId",getIntent().getLongExtra("rowId",0));
+        startActivity(intent);
     }
 }

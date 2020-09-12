@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -80,7 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/light"
-                        android:hint="Patient Name"
+                        android:hint="Disease"
                         android:inputType="textPersonName" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -147,7 +146,7 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5">
+                android:layout_weight="1">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -156,7 +155,7 @@
                     android:fontFamily="@font/regular"
                     android:text="Qty"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
+                    android:textSize="17sp" />
 
             </RelativeLayout>
 
@@ -192,34 +191,107 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
                     android:fontFamily="@font/regular"
-                    android:text="Time"
+                    android:text="Dinner"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
+                    android:textSize="17sp" />
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5">
+                android:layout_weight="5.5">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                <com.google.android.material.chip.ChipGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginHorizontal="10dp">
+                    android:layout_centerVertical="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/dropdown"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/beforedinner"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/light"
-                        android:hint="Time"/>
+                        android:gravity="center_vertical"
+                        android:text="Before Dinner" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/afterdinner"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="After Dinner" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:weightSum="10">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:text="Time"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="17sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/timegrp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:singleLine="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/morning"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Morning" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/Afternoon"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Afternoon" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/Night"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="Night" />
+
+                </com.google.android.material.chip.ChipGroup>
 
             </RelativeLayout>
 
@@ -231,22 +303,25 @@
             android:layout_weight="1">
 
             <com.google.android.material.button.MaterialButton
-                android:layout_centerInParent="true"
-                android:text="add"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:onClick="AddMeds"
+                android:text="add" />
 
         </RelativeLayout>
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/medlist"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:layout_weight="6" />
+            android:layout_weight="5" />
 
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:onClick="saveAndPrint"
         android:id="@+id/printbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -254,7 +329,6 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:backgroundTint="@color/colorPrimary"
-        android:src="@drawable/print_icon"
-        />
+        android:src="@drawable/print_icon" />
 
 </RelativeLayout>

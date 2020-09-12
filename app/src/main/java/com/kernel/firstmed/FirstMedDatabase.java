@@ -32,9 +32,17 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                         + PatientTable.GENDER_COLUMN + " TEXT NOT NULL, "
                         + PatientTable.DATE_COLUMN + " TEXT NOT NULL)";
 
-        //final String CREATE_MEDICINE_TABLE = "";
+        final String CREATE_MEDICINE_TABLE =
+                "CREATE TABLE IF NOT EXISTS "+ MedicineTable.TABLE_NAME + " ("
+                + MedicineTable._ID +" INTEGER PRIMARY KEY, "
+                + MedicineTable.PATIENT_ID_COLUMN + " TEXT NOT NULL, "
+                + MedicineTable.DATE_COLUMN + " TEXT NOT NULL, "
+                + MedicineTable.OLD_MEDICINE_COLUMN + " TEXT NOT NULL, "
+                + MedicineTable.OLD_DISEASE_COLUMN + " TEXT NOT NULL)";
+
         //final String CREATE_DEPT_TABLE = "";
         db.execSQL(CREATE_PATIENT_TABLE);
+        db.execSQL(CREATE_MEDICINE_TABLE);
     }
 
     @Override
@@ -52,6 +60,19 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         long rowId = db.insert(PatientTable.TABLE_NAME, null, values);
         db.close();
         return rowId;
+    }
+
+    public void addMedicine(List<String> meds,long rowID,String Diseases){
+        SQLiteDatabase db = this.getWritableDatabase();
+        for (int i=0;i<meds.size();i++) {
+            ContentValues values = new ContentValues();
+            values.put(MedicineTable.PATIENT_ID_COLUMN, "" + rowID);
+            values.put(MedicineTable.DATE_COLUMN, getDateTime());
+            values.put(MedicineTable.OLD_MEDICINE_COLUMN, meds.get(i));
+            values.put(MedicineTable.OLD_DISEASE_COLUMN,Diseases);
+            db.insert(MedicineTable.TABLE_NAME,null,values);
+        }
+        db.close();
     }
 
     public List<PatientPOJO> getPatient() {
@@ -106,5 +127,13 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         public static final String GENDER_COLUMN = "Gender";
         public static final String DATE_COLUMN = "Date";
 
+    }
+
+    public static class MedicineTable implements BaseColumns{
+        public static final String TABLE_NAME = "Medicine_History_Table";
+        public static final String PATIENT_ID_COLUMN = "Pid";
+        public static final String DATE_COLUMN = "Date";
+        public static final String OLD_MEDICINE_COLUMN = "OldMed";
+        public static final String OLD_DISEASE_COLUMN = "OldDes";
     }
 }
