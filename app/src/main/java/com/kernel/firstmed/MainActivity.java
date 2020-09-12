@@ -12,13 +12,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirstMedDatabase db = new FirstMedDatabase(this);
+        db.addPatient("Suyog","22","MALE");
     }
+
     public void SearchPatient(View view) {
         startActivity(new Intent(this, SearchPatient.class));
     }
+
     public void AddPatient(View view) {
         startActivity(new Intent(this, AddPatient.class));
     }
+
     public void Prescription(View view) {
         startActivity(new Intent(this, PrescriptionActivity.class));
     }
