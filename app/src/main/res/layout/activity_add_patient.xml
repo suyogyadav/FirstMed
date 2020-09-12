@@ -35,7 +35,6 @@
         android:layout_marginHorizontal="50dp"
         android:layout_marginVertical="100dp">
 
-
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/pnametxt"
             android:layout_width="wrap_content"
@@ -52,7 +51,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/age"
+            android:layout_above="@id/agelay"
             android:layout_centerHorizontal="true"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="20dp">
@@ -68,89 +67,135 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/agetxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/medium"
-            android:text="Age"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/age"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="200dp"
+        <LinearLayout
+            android:id="@+id/agelay"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_margin="10dp">
+            android:weightSum="10">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ageedttxt"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/agetxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/medium"
+                    android:text="Age"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/light"
-                android:hint="Age"
-                android:inputType="number" />
+                android:layout_weight="7">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/age"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/gendertxt"
-            android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ageedttxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/light"
+                        android:hint="Age"
+                        android:inputType="number" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/genlay"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/age"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/medium"
-            android:text="Gender"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp" />
+            android:layout_below="@id/agelay"
+            android:layout_marginTop="10dp"
+            android:weightSum="4">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/femaletxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/age"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="30dp"
-            android:layout_toEndOf="@id/gendertxt"
-            android:fontFamily="@font/regular"
-            android:text="Female"
-            android:textColor="@color/colorBlack"
-            android:textSize="15sp" />
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/genderswitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/age"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@id/femaletxt"
-            android:buttonTint="@color/colorPrimary" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/gendertxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/medium"
+                    android:text="Gender"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
 
+            </RelativeLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/maletxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/age"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="30dp"
-            android:layout_toEndOf="@id/genderswitch"
-            android:fontFamily="@font/regular"
-            android:text="Male"
-            android:textColor="@color/colorBlack"
-            android:textSize="15sp" />
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/femaletxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/regular"
+                    android:text="Female"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/genderswitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/maletxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/regular"
+                    android:text="Male"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/genderswitch"
+            android:layout_below="@id/genlay"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:onClick="submitBtn"
