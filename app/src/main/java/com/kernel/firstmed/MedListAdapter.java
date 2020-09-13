@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
@@ -15,15 +14,15 @@ import java.util.ArrayList;
 class MedListAdapter extends RecyclerView.Adapter {
 
     private ArrayList<String> MedList;
-    public MedListAdapter(ArrayList<String> medList)
-    {
+
+    public MedListAdapter(ArrayList<String> medList) {
         MedList = medList;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.med_layout,parent,false);
+        View view = inflater.inflate(R.layout.med_layout, parent, false);
         return new MedsViewHolder(view);
     }
 

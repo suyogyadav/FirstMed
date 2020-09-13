@@ -51,7 +51,17 @@ public class PatientDetails extends AppCompatActivity {
     }
 
     private void oldPatient(long rowId) {
-
+        FirstMedDatabase db = new FirstMedDatabase(this);
+        PatientPOJO patient = db.getSinglePatient(rowId);
+        pName.setText(patient.getName());
+        pAge.setText("Age : " + patient.getAge());
+        pLastDate.setText(patient.getDate());
+        tabLayout.setupWithViewPager(viewPager);
+        ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
+        pagerAdapter.addFragments(new NoRecordFragment(),"MEDICINE");
+        pagerAdapter.addFragments(new NoRecordFragment(),"DISEASE");
+        pagerAdapter.addFragments(new NoRecordFragment(),"DEPT");
+        viewPager.setAdapter(pagerAdapter);
     }
 
     public void close(View view) {

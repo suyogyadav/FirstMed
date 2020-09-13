@@ -20,7 +20,7 @@ public class SearchPatient extends AppCompatActivity {
         DividerItemDecoration decoration = new DividerItemDecoration(listView.getContext(),layoutManager.getOrientation());
         listView.addItemDecoration(decoration);
         listView.setLayoutManager(layoutManager);
-        listView.setAdapter(new RecentAdapter(db.getPatient()));
+        listView.setAdapter(new RecentAdapter(db.getPatient(),this));
     }
 
     public void close(View view) {
