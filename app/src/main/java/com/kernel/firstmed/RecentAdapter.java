@@ -2,6 +2,7 @@ package com.kernel.firstmed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-class RecentAdapter extends RecyclerView.Adapter {
+class RecentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<PatientPOJO> patients;
     Context ctx;
@@ -22,15 +23,16 @@ class RecentAdapter extends RecyclerView.Adapter {
         ctx = context;
     }
 
-    @NonNull @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.recent_patient,parent,false);
+        View view = inflater.inflate(R.layout.recent_patient, parent, false);
         return new ListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ListViewHolder listViewHolder = (ListViewHolder) holder;
         listViewHolder.pname.setText(patients.get(position).getName());
     }
@@ -40,18 +42,20 @@ class RecentAdapter extends RecyclerView.Adapter {
         return patients.size();
     }
 
-    public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView pname;
         public ListViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             pname = itemView.findViewById(R.id.pnamelist);
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(ctx,PatientDetails.class);
-            intent.putExtra("rowId",(long)(patients.get(getAdapterPosition()).id));
-            intent.putExtra("isNew",false);
+            Log.i("ABCD","Inside OnClick");
+            Intent intent = new Intent(ctx, PatientDetails.class);
+            intent.putExtra("rowId", (long) (patients.get(getAdapterPosition()).id));
+            intent.putExtra("isNew", false);
             ctx.startActivity(intent);
         }
     }

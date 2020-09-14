@@ -11,7 +11,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
-class MedListAdapter extends RecyclerView.Adapter {
+class MedListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<String> MedList;
 

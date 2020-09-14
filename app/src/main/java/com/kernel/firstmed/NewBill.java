@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -82,6 +83,7 @@ public class NewBill extends AppCompatActivity {
     {
         FirstMedDatabase db = new FirstMedDatabase(this);
         db.addMedicine(meds,getIntent().getLongExtra("rowId",0),diseaseName.getText().toString());
+        startActivity(new Intent(this,MainActivity.class));
     }
 
     public String getmeds() {

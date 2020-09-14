@@ -10,6 +10,8 @@ import android.view.View;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.util.List;
+
 public class PatientDetails extends AppCompatActivity {
 
     private MaterialTextView pName;
@@ -31,7 +33,8 @@ public class PatientDetails extends AppCompatActivity {
         boolean isNew = getIntent().getBooleanExtra("isNew", false);
         if (rowId != 0 && isNew) {
             newPatient(rowId);
-        } else {
+        }
+        if (rowId != 0 && !isNew) {
             oldPatient(rowId);
         }
     }
@@ -44,23 +47,24 @@ public class PatientDetails extends AppCompatActivity {
         pLastDate.setText(patient.getDate());
         tabLayout.setupWithViewPager(viewPager);
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
-        pagerAdapter.addFragments(new NoRecordFragment(),"MEDICINE");
-        pagerAdapter.addFragments(new NoRecordFragment(),"DISEASE");
-        pagerAdapter.addFragments(new NoRecordFragment(),"DEPT");
+        pagerAdapter.addFragments(new NoRecordFragment(), "MEDICINE");
+        pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
+        pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
         viewPager.setAdapter(pagerAdapter);
     }
 
     private void oldPatient(long rowId) {
         FirstMedDatabase db = new FirstMedDatabase(this);
         PatientPOJO patient = db.getSinglePatient(rowId);
+        List<MedicinePOJO> medicines = db.getMedicine(rowId);
         pName.setText(patient.getName());
         pAge.setText("Age : " + patient.getAge());
         pLastDate.setText(patient.getDate());
         tabLayout.setupWithViewPager(viewPager);
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
-        pagerAdapter.addFragments(new NoRecordFragment(),"MEDICINE");
-        pagerAdapter.addFragments(new NoRecordFragment(),"DISEASE");
-        pagerAdapter.addFragments(new NoRecordFragment(),"DEPT");
+        pagerAdapter.addFragments(new MedicineFragment(medicines), "MEDICINE");
+        pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
+        pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
         viewPager.setAdapter(pagerAdapter);
     }
 
@@ -69,8 +73,8 @@ public class PatientDetails extends AppCompatActivity {
     }
 
     public void NewBill(View view) {
-        Intent intent = new Intent(this,NewBill.class);
-        intent.putExtra("rowId",getIntent().getLongExtra("rowId",0));
+        Intent intent = new Intent(this, NewBill.class);
+        intent.putExtra("rowId", getIntent().getLongExtra("rowId", 0));
         startActivity(intent);
     }
 }
