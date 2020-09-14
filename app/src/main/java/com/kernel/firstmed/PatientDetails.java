@@ -5,6 +5,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
@@ -57,6 +58,7 @@ public class PatientDetails extends AppCompatActivity {
         FirstMedDatabase db = new FirstMedDatabase(this);
         PatientPOJO patient = db.getSinglePatient(rowId);
         List<MedicinePOJO> medicines = db.getMedicine(rowId);
+        printdata(medicines);
         pName.setText(patient.getName());
         pAge.setText("Age : " + patient.getAge());
         pLastDate.setText(patient.getDate());
@@ -66,6 +68,18 @@ public class PatientDetails extends AppCompatActivity {
         pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
         pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
         viewPager.setAdapter(pagerAdapter);
+    }
+
+    public void printdata(List<MedicinePOJO> abcd)
+    {
+        for (int i=0;i<abcd.size();i++)
+        {
+            Log.i("printdata",""+abcd.get(i).getDate());
+            for (int j=0;j<abcd.get(i).getOld_med().size();j++)
+            {
+                Log.i("printdata",""+abcd.get(i).getOld_med().get(j));
+            }
+        }
     }
 
     public void close(View view) {

@@ -1,5 +1,6 @@
 package com.kernel.firstmed;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +38,11 @@ public class MedicineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_medicine, container, false);
+        View view = inflater.inflate(R.layout.fragment_medicine, container, false);
+        ExpandableListView listView = view.findViewById(R.id.expandable_date);
+        ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(),dateList,medecineitems);
+        listView.setAdapter(adapter);
+        return view;
     }
 
     private void setdata()
@@ -46,5 +52,6 @@ public class MedicineFragment extends Fragment {
             dateList.add(medicines.get(i).getDate());
             medecineitems.put(medicines.get(i).getDate(),medicines.get(i).getOld_med());
         }
+
     }
 }

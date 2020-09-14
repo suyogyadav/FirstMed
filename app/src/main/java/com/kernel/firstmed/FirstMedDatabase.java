@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -117,7 +119,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {MedicineTable.PATIENT_ID_COLUMN, MedicineTable.DATE_COLUMN, MedicineTable.OLD_MEDICINE_COLUMN, MedicineTable.OLD_DISEASE_COLUMN};
         String selection = MedicineTable.PATIENT_ID_COLUMN + " = ?";
-        String[] selectionArgs = {"" + rowId};
+        String[] selectionArgs = {String.valueOf(rowId)};
         String sortOrder = MedicineTable.DATE_COLUMN + " DESC";
         Cursor cursor = db.query(MedicineTable.TABLE_NAME,projection,selection,selectionArgs,null,null,sortOrder);
         List<MedicinePOJO> medicinelist = new ArrayList<>();
@@ -129,11 +131,14 @@ class FirstMedDatabase extends SQLiteOpenHelper {
             medicine.setPid(cursor.getInt(0));
             String Date = cursor.getString(1);
             medicine.setDate(Date);
+            Log.i("printdata",Date);
             medicine.setOld_des(cursor.getString(3));
+            Log.i("printdata",cursor.getString(3));
             do {
                 medlist.add(cursor.getString(2));
+                Log.i("printdata",cursor.getString(2));
                 cursor.moveToNext();
-            }while (Date.equals(cursor.getString(1)));
+            }while (!cursor.isLast() && Date.equals(cursor.getString(1)));
             medicine.setOld_med(medlist);
             medicinelist.add(medicine);
             medlist.clear();
