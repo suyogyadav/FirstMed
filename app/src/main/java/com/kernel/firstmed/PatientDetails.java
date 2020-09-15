@@ -11,6 +11,7 @@ import android.view.View;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.util.Collections;
 import java.util.List;
 
 public class PatientDetails extends AppCompatActivity {
@@ -58,28 +59,29 @@ public class PatientDetails extends AppCompatActivity {
         FirstMedDatabase db = new FirstMedDatabase(this);
         PatientPOJO patient = db.getSinglePatient(rowId);
         List<MedicinePOJO> medicines = db.getMedicine(rowId);
-        printdata(medicines);
+        Collections.reverse(medicines);
+
         pName.setText(patient.getName());
         pAge.setText("Age : " + patient.getAge());
         pLastDate.setText(patient.getDate());
-        tabLayout.setupWithViewPager(viewPager);
-        ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
-        pagerAdapter.addFragments(new MedicineFragment(medicines), "MEDICINE");
-        pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
-        pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
-        viewPager.setAdapter(pagerAdapter);
-    }
 
-    public void printdata(List<MedicinePOJO> abcd)
-    {
-        for (int i=0;i<abcd.size();i++)
-        {
-            Log.i("printdata",""+abcd.get(i).getDate());
-            for (int j=0;j<abcd.get(i).getOld_med().size();j++)
-            {
-                Log.i("printdata",""+abcd.get(i).getOld_med().get(j));
-            }
+        if (!medicines.isEmpty()) {
+            tabLayout.setupWithViewPager(viewPager);
+            ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
+            pagerAdapter.addFragments(new MedicineFragment(medicines), "MEDICINE");
+            pagerAdapter.addFragments(new DiseaseFragment(medicines), "DISEASE");
+            pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
+            viewPager.setAdapter(pagerAdapter);
         }
+        else {
+            tabLayout.setupWithViewPager(viewPager);
+            ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
+            pagerAdapter.addFragments(new NoRecordFragment(), "MEDICINE");
+            pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
+            pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
+            viewPager.setAdapter(pagerAdapter);
+        }
+
     }
 
     public void close(View view) {

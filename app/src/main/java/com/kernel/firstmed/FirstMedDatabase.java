@@ -117,32 +117,40 @@ class FirstMedDatabase extends SQLiteOpenHelper {
 
     public List<MedicinePOJO> getMedicine(long rowId) {
         SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {MedicineTable.PATIENT_ID_COLUMN, MedicineTable.DATE_COLUMN, MedicineTable.OLD_MEDICINE_COLUMN, MedicineTable.OLD_DISEASE_COLUMN};
-        String selection = MedicineTable.PATIENT_ID_COLUMN + " = ?";
-        String[] selectionArgs = {String.valueOf(rowId)};
-        String sortOrder = MedicineTable.DATE_COLUMN + " DESC";
-        Cursor cursor = db.query(MedicineTable.TABLE_NAME,projection,selection,selectionArgs,null,null,sortOrder);
+        Cursor cursor = db.rawQuery("SELECT DISTINCT "+MedicineTable.DATE_COLUMN +" FROM "+MedicineTable.TABLE_NAME,null );
         List<MedicinePOJO> medicinelist = new ArrayList<>();
-        cursor.moveToFirst();
-        while(cursor.moveToNext())
-        {
-            List<String> medlist = new ArrayList<>();
-            MedicinePOJO medicine = new MedicinePOJO();
-            medicine.setPid(cursor.getInt(0));
-            String Date = cursor.getString(1);
-            medicine.setDate(Date);
-            Log.i("printdata",Date);
-            medicine.setOld_des(cursor.getString(3));
-            Log.i("printdata",cursor.getString(3));
+        if (cursor.moveToFirst()) {
             do {
-                medlist.add(cursor.getString(2));
-                Log.i("printdata",cursor.getString(2));
-                cursor.moveToNext();
-            }while (!cursor.isLast() && Date.equals(cursor.getString(1)));
-            medicine.setOld_med(medlist);
-            medicinelist.add(medicine);
-            medlist.clear();
+
+                List<String> medlist = new ArrayList<>();
+
+                MedicinePOJO medicine = new MedicinePOJO();
+                medicine.setPid((int) rowId);
+                medicine.setDate(cursor.getString(0));
+
+                String date = cursor.getString(0);
+
+                String[] projection1 = {MedicineTable.OLD_MEDICINE_COLUMN,MedicineTable.OLD_DISEASE_COLUMN};
+                String selection1 = MedicineTable.PATIENT_ID_COLUMN + " = ?" + " AND " + MedicineTable.DATE_COLUMN + " = ?";
+                String[] selectionArgs1 = {String.valueOf(rowId), date};
+                Cursor cursor1 = db.query(MedicineTable.TABLE_NAME, projection1, selection1, selectionArgs1, null, null, null );
+
+                if (cursor1.moveToFirst())
+                {
+                    medlist.clear();
+                    medicine.setOld_des(cursor1.getString(1));
+                    do {
+                        medlist.add(cursor1.getString(0));
+                        Log.i("XYZ",cursor1.getString(0));
+                    }while (cursor1.moveToNext());
+                    cursor1.close();
+                }
+                medicine.setOld_med(medlist);
+                medicinelist.add(medicine);
+                Log.i("poiu",""+medicine.getOld_med().size());
+            }while (cursor.moveToNext());
         }
+
         cursor.close();
         db.close();
         return medicinelist;

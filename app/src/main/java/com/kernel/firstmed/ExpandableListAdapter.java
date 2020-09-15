@@ -17,11 +17,13 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
     Context context;
     List<String> datelist;
     HashMap<String, List<String>> medlist;
+    boolean med;
 
-    public ExpandableListAdapter(Context context, List<String> datelist, HashMap<String, List<String>> medlist) {
+    public ExpandableListAdapter(Context context, List<String> datelist, HashMap<String, List<String>> medlist,boolean med) {
         this.context = context;
         this.datelist = datelist;
         this.medlist = medlist;
+        this.med = med;
     }
 
     @Override
@@ -31,7 +33,7 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return medlist.get(datelist.get(groupPosition)).size();
+        return this.medlist.get(datelist.get(groupPosition)).size();
     }
 
     @Override
@@ -73,17 +75,31 @@ class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        String MedicineName = (String) getChild(groupPosition, childPosition);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.med_layout, parent);
-        String[] medSplit = MedicineName.split("_n");
-        MaterialTextView medname = convertView.findViewById(R.id.medname);
-        MaterialTextView medqty = convertView.findViewById(R.id.medqty);
-        MaterialTextView medtime = convertView.findViewById(R.id.medtime);
-        medname.setText(medSplit[0]);
-        medqty.setText(medSplit[1]);
-        medtime.setText(medSplit[2]);
+        if (med) {
+            String MedicineName = (String) getChild(groupPosition, childPosition);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.med_layout, parent, false);
+            }
 
+            String[] medSplit = MedicineName.split("_n");
+            MaterialTextView medname = convertView.findViewById(R.id.medname);
+            MaterialTextView medqty = convertView.findViewById(R.id.medqty);
+            MaterialTextView medtime = convertView.findViewById(R.id.medtime);
+            medname.setText(medSplit[0]);
+            medqty.setText(medSplit[1]);
+            medtime.setText(medSplit[2]);
+        }
+        else {
+            String MedicineName = (String) getChild(groupPosition, childPosition);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.disease_name_layout, parent, false);
+            }
+
+            MaterialTextView disname = convertView.findViewById(R.id.dis_name);
+            disname.setText(MedicineName);
+        }
         return convertView;
     }
 

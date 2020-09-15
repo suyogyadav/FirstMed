@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MedicineFragment">
+    tools:context=".DiseaseFragment">
 
     <ExpandableListView
-        android:indicatorLeft="?android:attr/expandableListPreferredChildIndicatorLeft"
-        android:id="@+id/expandable_meds"
+        android:id="@+id/expandable_dis"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 </FrameLayout>

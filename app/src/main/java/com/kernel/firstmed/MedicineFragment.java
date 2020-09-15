@@ -39,8 +39,8 @@ public class MedicineFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_medicine, container, false);
-        ExpandableListView listView = view.findViewById(R.id.expandable_date);
-        ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(),dateList,medecineitems);
+        ExpandableListView listView = view.findViewById(R.id.expandable_meds);
+        ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(),dateList,medecineitems,true);
         listView.setAdapter(adapter);
         return view;
     }
