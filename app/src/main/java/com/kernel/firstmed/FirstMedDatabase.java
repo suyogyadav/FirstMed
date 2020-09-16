@@ -11,7 +11,6 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,9 +41,24 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                         + MedicineTable.OLD_MEDICINE_COLUMN + " TEXT NOT NULL, "
                         + MedicineTable.OLD_DISEASE_COLUMN + " TEXT NOT NULL)";
 
-        //final String CREATE_DEPT_TABLE = "";
+        final String CREATE_DEPT_TABLE =
+                "CREATE TABLE IF NOT EXISTS " + DeptTable.TABLE_NAME + " ("
+                        + DeptTable._ID + " INTEGER PRIMARY KEY, "
+                        + DeptTable.PATIENT_ID_COLUMN + " INTEGER NOT NULL, "
+                        + DeptTable.DEPT_COLUMN + " TEXT NOT NULL)";
+
+        final String CREATE_DEPT_HISTORY_TABLE =
+                "CREATE TABLE IF NOT EXISTS " + DeptHistoryTable.TABLE_NAME + " ("
+                        + DeptHistoryTable._ID + " INTEGER PRIMARY KEY, "
+                        + DeptHistoryTable.PATIENT_ID_COLUMN + " INTEGER NOT NULL, "
+                        + DeptHistoryTable.DATE_COLUMN + " TEXT NOT NULL, "
+                        + DeptHistoryTable.DEPT_COLUMN + " TEXT NOT NULL, "
+                        + DeptHistoryTable.TRANS_COLUMN + " TEXT NOT NULL)";
+
         db.execSQL(CREATE_PATIENT_TABLE);
         db.execSQL(CREATE_MEDICINE_TABLE);
+        db.execSQL(CREATE_DEPT_TABLE);
+        db.execSQL(CREATE_DEPT_HISTORY_TABLE);
     }
 
     @Override
@@ -117,7 +131,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
 
     public List<MedicinePOJO> getMedicine(long rowId) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT DISTINCT "+MedicineTable.DATE_COLUMN +" FROM "+MedicineTable.TABLE_NAME,null );
+        Cursor cursor = db.rawQuery("SELECT DISTINCT " + MedicineTable.DATE_COLUMN + " FROM " + MedicineTable.TABLE_NAME + " WHERE " + MedicineTable.PATIENT_ID_COLUMN + " = "+rowId, null);
         List<MedicinePOJO> medicinelist = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
@@ -130,25 +144,24 @@ class FirstMedDatabase extends SQLiteOpenHelper {
 
                 String date = cursor.getString(0);
 
-                String[] projection1 = {MedicineTable.OLD_MEDICINE_COLUMN,MedicineTable.OLD_DISEASE_COLUMN};
+                String[] projection1 = {MedicineTable.OLD_MEDICINE_COLUMN, MedicineTable.OLD_DISEASE_COLUMN};
                 String selection1 = MedicineTable.PATIENT_ID_COLUMN + " = ?" + " AND " + MedicineTable.DATE_COLUMN + " = ?";
                 String[] selectionArgs1 = {String.valueOf(rowId), date};
-                Cursor cursor1 = db.query(MedicineTable.TABLE_NAME, projection1, selection1, selectionArgs1, null, null, null );
+                Cursor cursor1 = db.query(MedicineTable.TABLE_NAME, projection1, selection1, selectionArgs1, null, null, null);
 
-                if (cursor1.moveToFirst())
-                {
+                if (cursor1.moveToFirst()) {
                     medlist.clear();
                     medicine.setOld_des(cursor1.getString(1));
                     do {
                         medlist.add(cursor1.getString(0));
-                        Log.i("XYZ",cursor1.getString(0));
-                    }while (cursor1.moveToNext());
+                        Log.i("XYZ", cursor1.getString(0));
+                    } while (cursor1.moveToNext());
                     cursor1.close();
                 }
                 medicine.setOld_med(medlist);
                 medicinelist.add(medicine);
-                Log.i("poiu",""+medicine.getOld_med().size());
-            }while (cursor.moveToNext());
+                Log.i("poiu", "" + medicine.getOld_med().size());
+            } while (cursor.moveToNext());
         }
 
         cursor.close();
@@ -178,5 +191,19 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         public static final String DATE_COLUMN = "Date";
         public static final String OLD_MEDICINE_COLUMN = "OldMed";
         public static final String OLD_DISEASE_COLUMN = "OldDes";
+    }
+
+    public static class DeptTable implements BaseColumns {
+        public static final String TABLE_NAME = "Dept_Table";
+        public static final String PATIENT_ID_COLUMN = "Pid";
+        public static final String DEPT_COLUMN = "Dept";
+    }
+
+    public static class DeptHistoryTable implements BaseColumns {
+        public static final String TABLE_NAME = "Dept_History_Table";
+        public static final String PATIENT_ID_COLUMN = "Pid";
+        public static final String DATE_COLUMN = "Date";
+        public static final String DEPT_COLUMN = "Dept";
+        public static final String TRANS_COLUMN = "Trans";
     }
 }

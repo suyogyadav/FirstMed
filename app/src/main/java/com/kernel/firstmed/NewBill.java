@@ -4,16 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -34,8 +34,6 @@ public class NewBill extends AppCompatActivity {
     private Chip afternoon;
     private Chip night;
 
-    //private AutoCompleteTextView dropdown;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +49,6 @@ public class NewBill extends AppCompatActivity {
         night = findViewById(R.id.Night);
         abc = findViewById(R.id.timegrp);
         meds = new ArrayList<>();
-        String[] droplist = new String[]{"Morning", "Afternoon", "Night"};
-        ArrayAdapter<String> dropadapter = new ArrayAdapter<>(this, R.layout.drop_down_layout, droplist);
-        //dropdown = findViewById(R.id.dropdown);
-        //dropdown.setAdapter(dropadapter);
-        //meds.add("Medicine Name_nQty_nTime");
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         DividerItemDecoration decoration = new DividerItemDecoration(medList.getContext(), layoutManager.getOrientation());
         medList.addItemDecoration(decoration);
@@ -79,11 +72,17 @@ public class NewBill extends AppCompatActivity {
         medicineName.requestFocus();
     }
 
-    public void saveAndPrint(View view)
-    {
+    public void saveAndPrint(View view) {
         FirstMedDatabase db = new FirstMedDatabase(this);
-        db.addMedicine(meds,getIntent().getLongExtra("rowId",0),diseaseName.getText().toString());
-        startActivity(new Intent(this,MainActivity.class));
+        db.addMedicine(meds, getIntent().getLongExtra("rowId", 0), diseaseName.getText().toString());
+        //showAlert();
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    public void showAlert() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle("Payment Method");
+        builder.show();
     }
 
     public String getmeds() {
@@ -92,14 +91,14 @@ public class NewBill extends AppCompatActivity {
         String abcd = "";
         for (int i = 0; i < ids.size(); i++) {
             if (beforeDinner.isChecked()) {
-                 abcd = abcd + ((Chip) findViewById(ids.get(i))).getText() + " Before Dinner";
+                abcd = abcd + ((Chip) findViewById(ids.get(i))).getText() + " Before Dinner";
             }
             if (afterDinner.isChecked()) {
                 abcd = abcd + ((Chip) findViewById(ids.get(i))).getText() + " After Dinner";
             }
-            abcd = abcd+"\n";
+            abcd = abcd + "\n";
         }
-        med = med+abcd;
+        med = med + abcd;
         return med;
     }
 
