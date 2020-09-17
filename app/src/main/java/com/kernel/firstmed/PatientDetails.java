@@ -51,7 +51,7 @@ public class PatientDetails extends AppCompatActivity {
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
         pagerAdapter.addFragments(new NoRecordFragment(), "MEDICINE");
         pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
-        pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
+        pagerAdapter.addFragments(new NoRecordFragment(), "DEBT");
         viewPager.setAdapter(pagerAdapter);
     }
 
@@ -60,6 +60,8 @@ public class PatientDetails extends AppCompatActivity {
         PatientPOJO patient = db.getSinglePatient(rowId);
         List<MedicinePOJO> medicines = db.getMedicine(rowId);
         Collections.reverse(medicines);
+        int dept = db.getDebt(rowId);
+        List<DebtPojo> debtHistory = db.getDebtHistory(rowId);
 
         pName.setText(patient.getName());
         pAge.setText("Age : " + patient.getAge());
@@ -70,7 +72,7 @@ public class PatientDetails extends AppCompatActivity {
             ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
             pagerAdapter.addFragments(new MedicineFragment(medicines), "MEDICINE");
             pagerAdapter.addFragments(new DiseaseFragment(medicines), "DISEASE");
-            pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
+            pagerAdapter.addFragments(new DebtFragment(dept,debtHistory), "DEBT");
             viewPager.setAdapter(pagerAdapter);
         }
         else {
@@ -78,7 +80,7 @@ public class PatientDetails extends AppCompatActivity {
             ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
             pagerAdapter.addFragments(new NoRecordFragment(), "MEDICINE");
             pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
-            pagerAdapter.addFragments(new NoRecordFragment(), "DEPT");
+            pagerAdapter.addFragments(new NoRecordFragment(), "DEBT");
             viewPager.setAdapter(pagerAdapter);
         }
 

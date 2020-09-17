@@ -52,7 +52,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                         + DeptHistoryTable._ID + " INTEGER PRIMARY KEY, "
                         + DeptHistoryTable.PATIENT_ID_COLUMN + " INTEGER NOT NULL, "
                         + DeptHistoryTable.DATE_COLUMN + " TEXT NOT NULL, "
-                        + DeptHistoryTable.DEPT_COLUMN + " TEXT NOT NULL, "
+                        + DeptHistoryTable.DEPT_COLUMN + " INTEGER NOT NULL, "
                         + DeptHistoryTable.TRANS_COLUMN + " TEXT NOT NULL)";
 
         db.execSQL(CREATE_PATIENT_TABLE);
@@ -90,6 +90,70 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         }
         db.close();
     }
+
+    public void addDebt(long rowId, int amount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DeptHistoryTable.PATIENT_ID_COLUMN, rowId);
+        values.put(DeptHistoryTable.DATE_COLUMN, getDateTime());
+        values.put(DeptHistoryTable.DEPT_COLUMN, amount);
+        values.put(DeptHistoryTable.TRANS_COLUMN, "ADEED");
+        db.insert(DeptHistoryTable.TABLE_NAME, null, values);
+
+        String[] projection = {DeptTable.PATIENT_ID_COLUMN, DeptTable.DEPT_COLUMN};
+        String selection = DeptTable.PATIENT_ID_COLUMN + " =? ";
+        String[] selectionArgs = {"" + rowId};
+        Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+
+        if (cursor != null) {
+            int oldAmt = cursor.getInt(1);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DeptTable.DEPT_COLUMN, (oldAmt + amount));
+            String selection1 = DeptTable.PATIENT_ID_COLUMN + " LIKE ?";
+            String[] selectionArgs1 = {"" + rowId};
+            db.update(DeptTable.TABLE_NAME, contentValues, selection1, selectionArgs1);
+        } else {
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DeptTable.PATIENT_ID_COLUMN, rowId);
+            contentValues.put(DeptTable.DEPT_COLUMN, (amount));
+            db.insert(DeptTable.TABLE_NAME, null, contentValues);
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+    public void removeDebt(long rowId, int amount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DeptHistoryTable.PATIENT_ID_COLUMN, rowId);
+        values.put(DeptHistoryTable.DATE_COLUMN, getDateTime());
+        values.put(DeptHistoryTable.DEPT_COLUMN, amount);
+        values.put(DeptHistoryTable.TRANS_COLUMN, "Removed");
+        db.insert(DeptHistoryTable.TABLE_NAME, null, values);
+
+        String[] projection = {DeptTable.PATIENT_ID_COLUMN, DeptTable.DEPT_COLUMN};
+        String selection = DeptTable.PATIENT_ID_COLUMN + " =? ";
+        String[] selectionArgs = {"" + rowId};
+        Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+
+        if (cursor != null) {
+            int oldAmt = cursor.getInt(1);
+            int newamt = oldAmt - amount;
+            ContentValues contentValues = new ContentValues();
+            if (newamt >= 0) {
+                contentValues.put(DeptTable.DEPT_COLUMN, (newamt));
+            } else {
+                contentValues.put(DeptTable.DEPT_COLUMN, 0);
+            }
+            String selection1 = DeptTable.PATIENT_ID_COLUMN + " LIKE ?";
+            String[] selectionArgs1 = {"" + rowId};
+            db.update(DeptTable.TABLE_NAME, contentValues, selection1, selectionArgs1);
+        }
+        db.close();
+    }
+
 
     public List<PatientPOJO> getPatient() {
         List<PatientPOJO> patients = new ArrayList<PatientPOJO>();
@@ -129,9 +193,10 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         return patient;
     }
 
+
     public List<MedicinePOJO> getMedicine(long rowId) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT DISTINCT " + MedicineTable.DATE_COLUMN + " FROM " + MedicineTable.TABLE_NAME + " WHERE " + MedicineTable.PATIENT_ID_COLUMN + " = "+rowId, null);
+        Cursor cursor = db.rawQuery("SELECT DISTINCT " + MedicineTable.DATE_COLUMN + " FROM " + MedicineTable.TABLE_NAME + " WHERE " + MedicineTable.PATIENT_ID_COLUMN + " = " + rowId, null);
         List<MedicinePOJO> medicinelist = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
@@ -167,6 +232,43 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return medicinelist;
+    }
+
+    public int getDebt(long rowId) {
+        int debt = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {DeptTable.PATIENT_ID_COLUMN, DeptTable.DEPT_COLUMN};
+        String selection = DeptTable.PATIENT_ID_COLUMN + " =? ";
+        String[] selectionArgs = {"" + rowId};
+        Cursor cursor = db.query(DeptTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+        if (cursor != null) {
+            debt = cursor.getInt(1);
+        } else {
+            debt = 0;
+        }
+        return debt;
+    }
+
+    public List<DebtPojo> getDebtHistory(long rowId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {DeptHistoryTable.PATIENT_ID_COLUMN, DeptHistoryTable.DATE_COLUMN, DeptHistoryTable.DEPT_COLUMN, DeptHistoryTable.TRANS_COLUMN};
+        String selection = DeptHistoryTable.PATIENT_ID_COLUMN + " =? ";
+        String[] selectionArgs = {"" + rowId};
+        Cursor cursor = db.query(DeptHistoryTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+        List<DebtPojo> debtHistory = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                DebtPojo debt = new DebtPojo();
+                debt.setPid(cursor.getInt(0));
+                debt.setDate(cursor.getString(1));
+                debt.setDebt(cursor.getInt(2));
+                debt.setTrans(cursor.getString(3));
+                debtHistory.add(debt);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return debtHistory;
     }
 
     private String getDateTime() {
