@@ -1,6 +1,14 @@
 package com.kernel.firstmed;
 
 class PatientPOJO {
+
+    int id;
+    String name;
+    String age;
+    String gender;
+    String Debt;
+
+
     public int getId() {
         return id;
     }
@@ -25,16 +33,21 @@ class PatientPOJO {
         this.age = age;
     }
 
-    public String getDate() {
-        return Date;
+    public String getDebt() {
+        return Debt;
     }
 
-    public void setDate(String date) {
-        Date = date;
+    public void setDebt(String Debt) {
+        Debt = Debt;
     }
 
-    int id;
-    String name;
-    String age;
-    String Date;
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+
 }

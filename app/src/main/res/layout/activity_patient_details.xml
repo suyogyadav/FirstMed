@@ -86,14 +86,14 @@
                     android:textSize="15sp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/PlastDate"
+                    android:id="@+id/gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/Page"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/light"
-                    android:text="Last Date Of Visit"
+                    android:text="Gender"
                     android:textColor="@color/colorBlack"
                     android:textSize="15sp" />
 

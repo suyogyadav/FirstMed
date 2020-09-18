@@ -31,7 +31,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                         + PatientTable.NAME_COLUMN + " TEXT NOT NULL, "
                         + PatientTable.AGE_COLUMN + " TEXT NOT NULL, "
                         + PatientTable.GENDER_COLUMN + " TEXT NOT NULL, "
-                        + PatientTable.DATE_COLUMN + " TEXT NOT NULL)";
+                        + PatientTable.DEBT_COLUMN + " TEXT NOT NULL)";
 
         final String CREATE_MEDICINE_TABLE =
                 "CREATE TABLE IF NOT EXISTS " + MedicineTable.TABLE_NAME + " ("
@@ -40,12 +40,6 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                         + MedicineTable.DATE_COLUMN + " TEXT NOT NULL, "
                         + MedicineTable.OLD_MEDICINE_COLUMN + " TEXT NOT NULL, "
                         + MedicineTable.OLD_DISEASE_COLUMN + " TEXT NOT NULL)";
-
-        final String CREATE_DEPT_TABLE =
-                "CREATE TABLE IF NOT EXISTS " + DeptTable.TABLE_NAME + " ("
-                        + DeptTable._ID + " INTEGER PRIMARY KEY, "
-                        + DeptTable.PATIENT_ID_COLUMN + " INTEGER NOT NULL, "
-                        + DeptTable.DEPT_COLUMN + " TEXT NOT NULL)";
 
         final String CREATE_DEPT_HISTORY_TABLE =
                 "CREATE TABLE IF NOT EXISTS " + DeptHistoryTable.TABLE_NAME + " ("
@@ -57,7 +51,6 @@ class FirstMedDatabase extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_PATIENT_TABLE);
         db.execSQL(CREATE_MEDICINE_TABLE);
-        db.execSQL(CREATE_DEPT_TABLE);
         db.execSQL(CREATE_DEPT_HISTORY_TABLE);
     }
 
@@ -72,7 +65,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         values.put(PatientTable.NAME_COLUMN, name);
         values.put(PatientTable.AGE_COLUMN, age);
         values.put(PatientTable.GENDER_COLUMN, gender);
-        values.put(PatientTable.DATE_COLUMN, getDateTime());
+        values.put(PatientTable.DEBT_COLUMN, ""+0);
         long rowId = db.insert(PatientTable.TABLE_NAME, null, values);
         db.close();
         return rowId;
@@ -97,29 +90,22 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         values.put(DeptHistoryTable.PATIENT_ID_COLUMN, rowId);
         values.put(DeptHistoryTable.DATE_COLUMN, getDateTime());
         values.put(DeptHistoryTable.DEPT_COLUMN, amount);
-        values.put(DeptHistoryTable.TRANS_COLUMN, "ADEED");
+        values.put(DeptHistoryTable.TRANS_COLUMN, "Added");
         db.insert(DeptHistoryTable.TABLE_NAME, null, values);
 
-        String[] projection = {DeptTable.PATIENT_ID_COLUMN, DeptTable.DEPT_COLUMN};
-        String selection = DeptTable.PATIENT_ID_COLUMN + " =? ";
+        String[] projection = {PatientTable._ID,PatientTable.DEBT_COLUMN};
+        String selection = PatientTable._ID + " =? ";
         String[] selectionArgs = {"" + rowId};
         Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
 
-        if (cursor != null) {
+        if (cursor.moveToFirst()) {
             int oldAmt = cursor.getInt(1);
             ContentValues contentValues = new ContentValues();
-            contentValues.put(DeptTable.DEPT_COLUMN, (oldAmt + amount));
-            String selection1 = DeptTable.PATIENT_ID_COLUMN + " LIKE ?";
+            contentValues.put(PatientTable.DEBT_COLUMN, (oldAmt + amount));
+            String selection1 = PatientTable._ID + " LIKE ?";
             String[] selectionArgs1 = {"" + rowId};
-            db.update(DeptTable.TABLE_NAME, contentValues, selection1, selectionArgs1);
-        } else {
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(DeptTable.PATIENT_ID_COLUMN, rowId);
-            contentValues.put(DeptTable.DEPT_COLUMN, (amount));
-            db.insert(DeptTable.TABLE_NAME, null, contentValues);
+            db.update(PatientTable.TABLE_NAME, contentValues, selection1, selectionArgs1);
         }
-
         cursor.close();
         db.close();
     }
@@ -130,35 +116,31 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         values.put(DeptHistoryTable.PATIENT_ID_COLUMN, rowId);
         values.put(DeptHistoryTable.DATE_COLUMN, getDateTime());
         values.put(DeptHistoryTable.DEPT_COLUMN, amount);
-        values.put(DeptHistoryTable.TRANS_COLUMN, "Removed");
+        values.put(DeptHistoryTable.TRANS_COLUMN, "Deducted");
         db.insert(DeptHistoryTable.TABLE_NAME, null, values);
 
-        String[] projection = {DeptTable.PATIENT_ID_COLUMN, DeptTable.DEPT_COLUMN};
-        String selection = DeptTable.PATIENT_ID_COLUMN + " =? ";
+        String[] projection = {PatientTable._ID,PatientTable.DEBT_COLUMN};
+        String selection = PatientTable._ID + " =? ";
         String[] selectionArgs = {"" + rowId};
         Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
-
-        if (cursor != null) {
+        if (cursor.moveToFirst()) {
             int oldAmt = cursor.getInt(1);
             int newamt = oldAmt - amount;
             ContentValues contentValues = new ContentValues();
-            if (newamt >= 0) {
-                contentValues.put(DeptTable.DEPT_COLUMN, (newamt));
-            } else {
-                contentValues.put(DeptTable.DEPT_COLUMN, 0);
-            }
-            String selection1 = DeptTable.PATIENT_ID_COLUMN + " LIKE ?";
+            contentValues.put(PatientTable.DEBT_COLUMN, Math.max(newamt, 0));
+            String selection1 = PatientTable._ID + " LIKE ?";
             String[] selectionArgs1 = {"" + rowId};
-            db.update(DeptTable.TABLE_NAME, contentValues, selection1, selectionArgs1);
+            db.update(PatientTable.TABLE_NAME, contentValues, selection1, selectionArgs1);
         }
+        cursor.close();
         db.close();
     }
 
 
     public List<PatientPOJO> getPatient() {
-        List<PatientPOJO> patients = new ArrayList<PatientPOJO>();
+        List<PatientPOJO> patients = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {PatientTable._ID, PatientTable.NAME_COLUMN, PatientTable.AGE_COLUMN, PatientTable.GENDER_COLUMN, PatientTable.DATE_COLUMN};
+        String[] projection = {PatientTable._ID, PatientTable.NAME_COLUMN, PatientTable.AGE_COLUMN, PatientTable.GENDER_COLUMN, PatientTable.DEBT_COLUMN};
         String sortOrder = PatientTable._ID + " DESC";
         Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, null, null, null, null, sortOrder);
         if (cursor.moveToFirst()) {
@@ -167,7 +149,8 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                 patient.setId(cursor.getInt(0));
                 patient.setName(cursor.getString(1));
                 patient.setAge(cursor.getString(2));
-                patient.setDate(cursor.getString(3));
+                patient.setGender(cursor.getString(3));
+                patient.setDebt(cursor.getString(4));
                 patients.add(patient);
             } while (cursor.moveToNext());
         }
@@ -178,7 +161,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
 
     public PatientPOJO getSinglePatient(long rowId) {
         SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {PatientTable._ID, PatientTable.NAME_COLUMN, PatientTable.AGE_COLUMN, PatientTable.GENDER_COLUMN, PatientTable.DATE_COLUMN};
+        String[] projection = {PatientTable._ID, PatientTable.NAME_COLUMN, PatientTable.AGE_COLUMN, PatientTable.GENDER_COLUMN, PatientTable.DEBT_COLUMN};
         String selection = PatientTable._ID + " = ?";
         String[] selectionArgs = {"" + rowId};
         Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
@@ -187,7 +170,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         patient.setId(cursor.getInt(0));
         patient.setName(cursor.getString(1));
         patient.setAge(cursor.getString(2));
-        patient.setDate(cursor.getString(3));
+        patient.setDebt(cursor.getString(3));
         cursor.close();
         db.close();
         return patient;
@@ -237,15 +220,15 @@ class FirstMedDatabase extends SQLiteOpenHelper {
     public int getDebt(long rowId) {
         int debt = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] projection = {DeptTable.PATIENT_ID_COLUMN, DeptTable.DEPT_COLUMN};
-        String selection = DeptTable.PATIENT_ID_COLUMN + " =? ";
+        String[] projection = {PatientTable._ID, PatientTable.DEBT_COLUMN};
+        String selection = PatientTable._ID + " =? ";
         String[] selectionArgs = {"" + rowId};
-        Cursor cursor = db.query(DeptTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
-        if (cursor != null) {
+        Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+        if (cursor.moveToFirst()) {
             debt = cursor.getInt(1);
-        } else {
-            debt = 0;
         }
+        cursor.close();
+        db.close();
         return debt;
     }
 
@@ -283,7 +266,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         public static final String NAME_COLUMN = "Name";
         public static final String AGE_COLUMN = "Age";
         public static final String GENDER_COLUMN = "Gender";
-        public static final String DATE_COLUMN = "Date";
+        public static final String DEBT_COLUMN = "Debt";
 
     }
 
@@ -293,12 +276,6 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         public static final String DATE_COLUMN = "Date";
         public static final String OLD_MEDICINE_COLUMN = "OldMed";
         public static final String OLD_DISEASE_COLUMN = "OldDes";
-    }
-
-    public static class DeptTable implements BaseColumns {
-        public static final String TABLE_NAME = "Dept_Table";
-        public static final String PATIENT_ID_COLUMN = "Pid";
-        public static final String DEPT_COLUMN = "Dept";
     }
 
     public static class DeptHistoryTable implements BaseColumns {

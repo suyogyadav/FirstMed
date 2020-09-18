@@ -18,7 +18,7 @@ public class PatientDetails extends AppCompatActivity {
 
     private MaterialTextView pName;
     private MaterialTextView pAge;
-    private MaterialTextView pLastDate;
+    private MaterialTextView gender;
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -28,7 +28,7 @@ public class PatientDetails extends AppCompatActivity {
         setContentView(R.layout.activity_patient_details);
         pName = findViewById(R.id.pname);
         pAge = findViewById(R.id.Page);
-        pLastDate = findViewById(R.id.PlastDate);
+        gender = findViewById(R.id.gender);
         viewPager = findViewById(R.id.viewpager);
         tabLayout = findViewById(R.id.tablayout);
         long rowId = getIntent().getLongExtra("rowId", 0);
@@ -46,7 +46,7 @@ public class PatientDetails extends AppCompatActivity {
         PatientPOJO patient = db.getSinglePatient(rowId);
         pName.setText(patient.getName());
         pAge.setText("Age : " + patient.getAge());
-        pLastDate.setText(patient.getDate());
+        gender.setText(patient.getGender());
         tabLayout.setupWithViewPager(viewPager);
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
         pagerAdapter.addFragments(new NoRecordFragment(), "MEDICINE");
@@ -65,7 +65,7 @@ public class PatientDetails extends AppCompatActivity {
 
         pName.setText(patient.getName());
         pAge.setText("Age : " + patient.getAge());
-        pLastDate.setText(patient.getDate());
+        gender.setText(patient.getGender());
 
         if (!medicines.isEmpty()) {
             tabLayout.setupWithViewPager(viewPager);

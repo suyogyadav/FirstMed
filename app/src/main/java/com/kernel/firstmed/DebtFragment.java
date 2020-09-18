@@ -28,7 +28,8 @@ public class DebtFragment extends Fragment {
     public DebtFragment() {
         // Required empty public constructor
     }
-    public DebtFragment(int debt , List<DebtPojo> debtHistory){
+
+    public DebtFragment(int debt, List<DebtPojo> debtHistory) {
         this.debt = debt;
         this.debtHistory = debtHistory;
     }
@@ -41,16 +42,16 @@ public class DebtFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_debt,null);
+        View view = inflater.inflate(R.layout.fragment_debt, null);
         final MaterialTextView balance = view.findViewById(R.id.balanceAmount);
         final MaterialButton addButton = view.findViewById(R.id.amtaddbtn);
-        MaterialButton deductButton = view.findViewById(R.id.amtdeductbtn);
-
-        RecyclerView recyclerView = view.findViewById(R.id.transhis);
+        final MaterialButton deductButton = view.findViewById(R.id.amtdeductbtn);
+        final TrasHistoryAdapter adapter = new TrasHistoryAdapter(getContext(), debtHistory);
+        final RecyclerView recyclerView = view.findViewById(R.id.transhis);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new TrasHistoryAdapter(getContext(),debtHistory));
+        recyclerView.setAdapter(adapter);
 
-        balance.setText(debt);
+        balance.setText("" + debt);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,8 +65,9 @@ public class DebtFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FirstMedDatabase db = new FirstMedDatabase(getContext());
-                        db.addDebt(debtHistory.get(0).getPid(),Integer.parseInt(amount.getText().toString()));
-                        balance.setText(db.getDebt(debtHistory.get(0).getPid()));
+                        db.addDebt(debtHistory.get(0).getPid(), Integer.parseInt(amount.getText().toString()));
+                        balance.setText(""+db.getDebt(debtHistory.get(0).getPid()));
+                        adapter.notifyDataSetChanged();
                     }
                 });
                 builder.setCancelable(false);
@@ -85,8 +87,9 @@ public class DebtFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FirstMedDatabase db = new FirstMedDatabase(getContext());
-                        db.removeDebt(debtHistory.get(0).getPid(),Integer.parseInt(amount.getText().toString()));
-                        balance.setText(db.getDebt(debtHistory.get(0).getPid()));
+                        db.removeDebt(debtHistory.get(0).getPid(), Integer.parseInt(amount.getText().toString()));
+                        balance.setText(""+db.getDebt(debtHistory.get(0).getPid()));
+                        adapter.notifyDataSetChanged();
                     }
                 });
                 builder.setCancelable(false);
@@ -94,6 +97,6 @@ public class DebtFragment extends Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.fragment_debt, container, false);
+        return view;
     }
 }

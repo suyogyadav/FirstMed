@@ -36,7 +36,7 @@ class TrasHistoryAdapter extends RecyclerView.Adapter {
         TrasHistoryAdapter.TransViewHolder viewHolder = (TransViewHolder) holder;
         viewHolder.title.setText(transhis.get(position).getTrans());
         viewHolder.date.setText(transhis.get(position).getDate());
-        viewHolder.amount.setText(transhis.get(position).getDebt());
+        viewHolder.amount.setText("+"+transhis.get(position).getDebt());
     }
 
     @Override

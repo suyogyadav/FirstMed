@@ -4,21 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.tabs.TabLayout;
+
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,14 +90,14 @@ public class NewBill extends AppCompatActivity {
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switchAction(cashGroup.getCheckedChipId(),Integer.parseInt(amount.getText().toString()));
+                switchAction(cashGroup.getCheckedChipId(), Integer.parseInt(amount.getText().toString()));
             }
         });
         builder.setCancelable(false);
         builder.show();
     }
 
-    public void switchAction(int id,int amount) {
+    public void switchAction(int id, int amount) {
         switch (id) {
             case R.id.cashswitch:
                 Toast.makeText(this, "Printing In Process", Toast.LENGTH_SHORT).show();
@@ -108,16 +105,17 @@ public class NewBill extends AppCompatActivity {
 
             case R.id.adddebtswitch:
                 FirstMedDatabase db = new FirstMedDatabase(this);
-                db.addDebt(getIntent().getLongExtra("rowId",0),amount);
-                Toast.makeText(this, "ADD DEBT Selected", Toast.LENGTH_SHORT).show();
+                db.addDebt(getIntent().getLongExtra("rowId", 0), amount);
+                Toast.makeText(this, "Added To Debt", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.removedebtswitch:
                 FirstMedDatabase database = new FirstMedDatabase(this);
-                database.removeDebt(getIntent().getLongExtra("rowId",0),amount);
-                Toast.makeText(this, "Remove DEBT Selected", Toast.LENGTH_SHORT).show();
+                database.removeDebt(getIntent().getLongExtra("rowId", 0), amount);
+                Toast.makeText(this, "Deducted from Debt", Toast.LENGTH_SHORT).show();
                 break;
         }
+        finish();
     }
 
     public String getmeds() {
