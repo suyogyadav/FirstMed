@@ -49,9 +49,15 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                         + DeptHistoryTable.DEPT_COLUMN + " INTEGER NOT NULL, "
                         + DeptHistoryTable.TRANS_COLUMN + " TEXT NOT NULL)";
 
+        final String CREATE_MEDICINE_LIST_TABLE =
+                "CREATE TABLE IF NOT EXISTS " + MedicineListTable.TABLE_NAME + " ("
+                        + MedicineListTable._ID + " INTEGER PRIMARY KEY, "
+                        + MedicineListTable.MEDICINE_NAME + " TEXT NOT NULL)";
+
         db.execSQL(CREATE_PATIENT_TABLE);
         db.execSQL(CREATE_MEDICINE_TABLE);
         db.execSQL(CREATE_DEPT_HISTORY_TABLE);
+        db.execSQL(CREATE_MEDICINE_LIST_TABLE);
     }
 
     @Override
@@ -65,7 +71,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         values.put(PatientTable.NAME_COLUMN, name);
         values.put(PatientTable.AGE_COLUMN, age);
         values.put(PatientTable.GENDER_COLUMN, gender);
-        values.put(PatientTable.DEBT_COLUMN, ""+0);
+        values.put(PatientTable.DEBT_COLUMN, "" + 0);
         long rowId = db.insert(PatientTable.TABLE_NAME, null, values);
         db.close();
         return rowId;
@@ -84,6 +90,32 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addMedList(String med) {
+        if (!isMedAvilable(med)) {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(MedicineListTable.MEDICINE_NAME, med);
+            db.insert(MedicineListTable.TABLE_NAME, null, values);
+            db.close();
+        }
+    }
+
+    public boolean isMedAvilable(String med) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {MedicineListTable.MEDICINE_NAME};
+        Cursor cursor = db.query(MedicineListTable.TABLE_NAME, projection, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                if (med.equals(cursor.getString(0))) {
+                    return true;
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return false;
+    }
+
     public void addDebt(long rowId, int amount) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -93,7 +125,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         values.put(DeptHistoryTable.TRANS_COLUMN, "Added");
         db.insert(DeptHistoryTable.TABLE_NAME, null, values);
 
-        String[] projection = {PatientTable._ID,PatientTable.DEBT_COLUMN};
+        String[] projection = {PatientTable._ID, PatientTable.DEBT_COLUMN};
         String selection = PatientTable._ID + " =? ";
         String[] selectionArgs = {"" + rowId};
         Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
@@ -119,7 +151,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         values.put(DeptHistoryTable.TRANS_COLUMN, "Deducted");
         db.insert(DeptHistoryTable.TABLE_NAME, null, values);
 
-        String[] projection = {PatientTable._ID,PatientTable.DEBT_COLUMN};
+        String[] projection = {PatientTable._ID, PatientTable.DEBT_COLUMN};
         String selection = PatientTable._ID + " =? ";
         String[] selectionArgs = {"" + rowId};
         Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
@@ -174,6 +206,22 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return patient;
+    }
+
+    public List<String> getMedicineList() {
+        List<String> medicines = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = {MedicineListTable.MEDICINE_NAME};
+        Cursor cursor = db.query(MedicineListTable.TABLE_NAME, projection, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String medicine = cursor.getString(0);
+                medicines.add(medicine);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return medicines;
     }
 
 
@@ -284,5 +332,10 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         public static final String DATE_COLUMN = "Date";
         public static final String DEPT_COLUMN = "Dept";
         public static final String TRANS_COLUMN = "Trans";
+    }
+
+    public static class MedicineListTable implements BaseColumns {
+        public static final String TABLE_NAME = "Medicine_List_Table";
+        public static final String MEDICINE_NAME = "MedicineName";
     }
 }

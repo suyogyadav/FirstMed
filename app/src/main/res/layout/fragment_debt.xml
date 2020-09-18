@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
-            android:fontFamily="@font/light"
+            android:fontFamily="@font/regular"
             android:text="Debt Balance : "
             android:textColor="@color/colorBlack"
             android:textSize="18sp" />

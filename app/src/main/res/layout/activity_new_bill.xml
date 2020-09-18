@@ -119,16 +119,17 @@
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="54dp"
                     android:layout_centerInParent="true"
                     android:layout_marginHorizontal="10dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <AutoCompleteTextView
                         android:id="@+id/edtmed"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:fontFamily="@font/light"
                         android:hint="Medicines"
+                        android:paddingStart="10dp"
                         android:inputType="textPersonName" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -220,6 +221,7 @@
                         android:text="Before Dinner" />
 
                     <com.google.android.material.chip.Chip
+                        android:checked="true"
                         android:id="@+id/afterdinner"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
@@ -268,6 +270,7 @@
                     app:singleLine="true">
 
                     <com.google.android.material.chip.Chip
+                        android:checked="true"
                         android:id="@+id/morning"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"

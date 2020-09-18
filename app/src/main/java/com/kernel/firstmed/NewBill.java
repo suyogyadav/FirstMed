@@ -5,9 +5,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
@@ -23,7 +27,7 @@ import java.util.List;
 public class NewBill extends AppCompatActivity {
 
     private TextInputEditText diseaseName;
-    private TextInputEditText medicineName;
+    private AutoCompleteTextView medicineName;
     private TextInputEditText qty;
     private RecyclerView medList;
     private ArrayList<String> meds;
@@ -34,10 +38,13 @@ public class NewBill extends AppCompatActivity {
     private Chip morning;
     private Chip afternoon;
     private Chip night;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
+        FirstMedDatabase db = new FirstMedDatabase(this);
         setContentView(R.layout.activity_new_bill);
         diseaseName = findViewById(R.id.edtdes);
         medicineName = findViewById(R.id.edtmed);
@@ -50,6 +57,7 @@ public class NewBill extends AppCompatActivity {
         night = findViewById(R.id.Night);
         abc = findViewById(R.id.timegrp);
         meds = new ArrayList<>();
+        medicineName.setAdapter(new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,db.getMedicineList()));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         DividerItemDecoration decoration = new DividerItemDecoration(medList.getContext(), layoutManager.getOrientation());
         medList.addItemDecoration(decoration);
@@ -60,24 +68,43 @@ public class NewBill extends AppCompatActivity {
     }
 
     public void AddMeds(View view) {
-        String med = getmeds();
-        meds.add(med);
-        adapter.notifyDataSetChanged();
-        medicineName.setText("");
-        qty.setText("");
-        beforeDinner.setChecked(false);
-        afterDinner.setChecked(false);
-        morning.setChecked(false);
-        afternoon.setChecked(false);
-        night.setChecked(false);
-        medicineName.requestFocus();
+        if (diseaseName.getText().toString().equals("") ) {
+
+            diseaseName.requestFocus();
+            Toast.makeText(this, "Disease Cannot Be Empty", Toast.LENGTH_SHORT).show();
+        }
+
+        if (meds.isEmpty() && medicineName.getText().toString().equals("") && qty.getText().toString().equals("")) {
+            medicineName.requestFocus();
+            Toast.makeText(this, "Add At Least One Medicine with Qty", Toast.LENGTH_SHORT).show();
+        }
+
+        if (!diseaseName.getText().toString().equals("") && !medicineName.getText().toString().equals("") && !qty.getText().toString().equals(""))
+        {
+            FirstMedDatabase db = new FirstMedDatabase(this);
+            db.addMedList(medicineName.getText().toString());
+            String med = getmeds();
+            meds.add(med);
+            adapter.notifyDataSetChanged();
+
+            medicineName.setText("");
+            qty.setText("");
+            beforeDinner.setChecked(false);
+            afterDinner.setChecked(true);
+            morning.setChecked(true);
+            afternoon.setChecked(false);
+            night.setChecked(false);
+            medicineName.requestFocus();
+        }
     }
 
     public void saveAndPrint(View view) {
-        FirstMedDatabase db = new FirstMedDatabase(this);
-        db.addMedicine(meds, getIntent().getLongExtra("rowId", 0), diseaseName.getText().toString());
-        showAlert();
-        //startActivity(new Intent(this, MainActivity.class));
+        if (!meds.isEmpty()) {
+            showAlert();
+        }
+        else {
+            Toast.makeText(this,"No Medicines Added",Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void showAlert() {
@@ -90,7 +117,16 @@ public class NewBill extends AppCompatActivity {
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switchAction(cashGroup.getCheckedChipId(), Integer.parseInt(amount.getText().toString()));
+                if (amount.getText().toString().equals(""))
+                {
+                    amount.requestFocus();
+                    Toast.makeText(context, "Set Price", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    FirstMedDatabase db = new FirstMedDatabase(context);
+                    db.addMedicine(meds, getIntent().getLongExtra("rowId", 0), diseaseName.getText().toString());
+                    switchAction(cashGroup.getCheckedChipId(), Integer.parseInt(amount.getText().toString()));
+                }
             }
         });
         builder.setCancelable(false);
@@ -115,11 +151,11 @@ public class NewBill extends AppCompatActivity {
                 Toast.makeText(this, "Deducted from Debt", Toast.LENGTH_SHORT).show();
                 break;
         }
-        finish();
+        startActivity(new Intent(this,MainActivity.class));
     }
 
     public String getmeds() {
-        String med = med = medicineName.getText().toString() + "_n" + qty.getText().toString() + "_n" + "";
+        String med = medicineName.getText().toString() + "_n" + qty.getText().toString() + "_n" + "";
         List<Integer> ids = abc.getCheckedChipIds();
         String abcd = "";
         for (int i = 0; i < ids.size(); i++) {
