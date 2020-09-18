@@ -22,15 +22,6 @@ public class AddPatient extends AppCompatActivity {
         nameText = findViewById(R.id.pnameedttxt);
         ageText = findViewById(R.id.ageedttxt);
         genderSwitch = findViewById(R.id.genderswitch);
-//        int[][] states = new int[][] {
-//                new int[] { android.R.attr.state_checked}, // enabled
-//                new int[] {-android.R.attr.state_checked}, // unchecked
-//        };
-//        int[] colors = new int[] {
-//                R.color.colorPrimaryDark,
-//                R.color.colorWhite
-//        };
-//        genderSwitch.setTrackTintList(new ColorStateList(states,colors));
     }
 
     public void close(View view) {
@@ -49,7 +40,7 @@ public class AddPatient extends AppCompatActivity {
         long rowId = db.addPatient(Name, Age, Gender);
         Intent intent = new Intent(this, PatientDetails.class);
         intent.putExtra("rowId", rowId);
-        intent.putExtra("isNew",true);
+        intent.putExtra("isNew", true);
         startActivity(intent);
     }
 }
