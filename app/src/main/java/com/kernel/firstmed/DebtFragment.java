@@ -29,9 +29,11 @@ public class DebtFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public DebtFragment(int debt, List<DebtPojo> debtHistory) {
-        this.debt = debt;
-        this.debtHistory = debtHistory;
+    public DebtFragment(long rowId,Context context) {
+        this.context = context;
+        FirstMedDatabase db = new FirstMedDatabase(context);
+        debt = db.getDebt(rowId);
+        debtHistory = db.getDebtHistory(rowId);
     }
 
     @Override
@@ -67,7 +69,9 @@ public class DebtFragment extends Fragment {
                         FirstMedDatabase db = new FirstMedDatabase(getContext());
                         db.addDebt(debtHistory.get(0).getPid(), Integer.parseInt(amount.getText().toString()));
                         balance.setText(""+db.getDebt(debtHistory.get(0).getPid()));
-                        adapter.notifyDataSetChanged();
+                        List<DebtPojo> newlist = db.getDebtHistory(debtHistory.get(0).getPid());
+                        TrasHistoryAdapter newadapter = new TrasHistoryAdapter(getContext(), newlist);
+                        recyclerView.setAdapter(newadapter);
                     }
                 });
                 builder.setCancelable(false);
@@ -89,7 +93,9 @@ public class DebtFragment extends Fragment {
                         FirstMedDatabase db = new FirstMedDatabase(getContext());
                         db.removeDebt(debtHistory.get(0).getPid(), Integer.parseInt(amount.getText().toString()));
                         balance.setText(""+db.getDebt(debtHistory.get(0).getPid()));
-                        adapter.notifyDataSetChanged();
+                        List<DebtPojo> newlist = db.getDebtHistory(debtHistory.get(0).getPid());
+                        TrasHistoryAdapter newadapter = new TrasHistoryAdapter(getContext(), newlist);
+                        recyclerView.setAdapter(newadapter);
                     }
                 });
                 builder.setCancelable(false);

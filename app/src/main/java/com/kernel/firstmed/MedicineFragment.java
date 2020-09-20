@@ -20,7 +20,6 @@ public class MedicineFragment extends Fragment {
     private List<String> dateList;
     private HashMap<String,List<String>> medecineitems;
     public MedicineFragment() {
-        // Required empty public constructor
     }
     public MedicineFragment(List<MedicinePOJO> medicines) {
         this.medicines=medicines;
@@ -37,7 +36,6 @@ public class MedicineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_medicine, container, false);
         ExpandableListView listView = view.findViewById(R.id.expandable_meds);
         ExpandableListAdapter adapter = new ExpandableListAdapter(getContext(),dateList,medecineitems,true);

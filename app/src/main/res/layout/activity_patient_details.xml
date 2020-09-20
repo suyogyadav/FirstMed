@@ -41,7 +41,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
+            android:divider="@color/colorPrimary"
+            android:dividerPadding="2dp"
             android:orientation="horizontal"
+            android:showDividers="end"
             android:weightSum="9">
 
             <RelativeLayout
@@ -110,8 +113,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:background="@color/colorWhite"
-                    android:src="@drawable/add_box_icon"
-                    android:onClick="NewBill"/>
+                    android:onClick="NewBill"
+                    android:src="@drawable/add_box_icon" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -132,18 +135,21 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.7"
-            app:tabTextAppearance="@style/TabText">
+            app:tabBackground="@color/colorPrimary"
+            app:tabIndicatorColor="@color/colorWhite"
+            app:tabTextAppearance="@style/TabText"
+            app:tabTextColor="@color/colorWhite">
 
             <com.google.android.material.tabs.TabItem
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medicine"
-                />
+                android:text="Medicine" />
+
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Disease" />
+
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
