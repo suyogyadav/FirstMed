@@ -302,6 +302,32 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         return debtHistory;
     }
 
+    public void deletePatient(long rowId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selection = PatientTable._ID+" LIKE ?";
+        String[] selectionArgs = {""+rowId};
+
+        db.delete(PatientTable.TABLE_NAME,selection,selectionArgs);
+
+        selection = MedicineTable.PATIENT_ID_COLUMN + " LIKE ?";
+        db.delete(MedicineTable.TABLE_NAME,selection,selectionArgs);
+
+        selection = DeptHistoryTable.PATIENT_ID_COLUMN + " LIKE ?";
+        db.delete(DeptHistoryTable.TABLE_NAME,selection,selectionArgs);
+        db.close();
+    }
+
+    public void deleteMedicine(String name)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selection = MedicineListTable.MEDICINE_NAME+" LIKE ?";
+        String[] selectionArgs = {name};
+        int deleted = db.delete(MedicineListTable.TABLE_NAME,selection,selectionArgs);
+        Log.i("abgd",""+deleted);
+        db.close();
+    }
+
     private String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();

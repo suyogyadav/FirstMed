@@ -24,6 +24,7 @@ public class DebtFragment extends Fragment {
     private int debt;
     private List<DebtPojo> debtHistory;
     private Context context;
+    long RowId;
 
     public DebtFragment() {
         // Required empty public constructor
@@ -31,6 +32,7 @@ public class DebtFragment extends Fragment {
 
     public DebtFragment(long rowId,Context context) {
         this.context = context;
+        RowId = rowId;
         FirstMedDatabase db = new FirstMedDatabase(context);
         debt = db.getDebt(rowId);
         debtHistory = db.getDebtHistory(rowId);
@@ -67,9 +69,9 @@ public class DebtFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FirstMedDatabase db = new FirstMedDatabase(getContext());
-                        db.addDebt(debtHistory.get(0).getPid(), Integer.parseInt(amount.getText().toString()));
-                        balance.setText(""+db.getDebt(debtHistory.get(0).getPid()));
-                        List<DebtPojo> newlist = db.getDebtHistory(debtHistory.get(0).getPid());
+                        db.addDebt(RowId, Integer.parseInt(amount.getText().toString()));
+                        balance.setText(""+db.getDebt(RowId));
+                        List<DebtPojo> newlist = db.getDebtHistory(RowId);
                         TrasHistoryAdapter newadapter = new TrasHistoryAdapter(getContext(), newlist);
                         recyclerView.setAdapter(newadapter);
                     }
@@ -86,14 +88,15 @@ public class DebtFragment extends Fragment {
                 builder.setTitle("Deduct Amount");
                 View alertLayout = getLayoutInflater().inflate(R.layout.alert_layout, null);
                 final TextInputEditText amount = alertLayout.findViewById(R.id.amountTEXT);
+                amount.setHint("Amount");
                 builder.setView(alertLayout);
                 builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FirstMedDatabase db = new FirstMedDatabase(getContext());
-                        db.removeDebt(debtHistory.get(0).getPid(), Integer.parseInt(amount.getText().toString()));
-                        balance.setText(""+db.getDebt(debtHistory.get(0).getPid()));
-                        List<DebtPojo> newlist = db.getDebtHistory(debtHistory.get(0).getPid());
+                        db.removeDebt(RowId, Integer.parseInt(amount.getText().toString()));
+                        balance.setText(""+db.getDebt(RowId));
+                        List<DebtPojo> newlist = db.getDebtHistory(RowId);
                         TrasHistoryAdapter newadapter = new TrasHistoryAdapter(getContext(), newlist);
                         recyclerView.setAdapter(newadapter);
                     }

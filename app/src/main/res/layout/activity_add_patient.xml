@@ -166,6 +166,7 @@
                 android:layout_weight="1">
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:checked="true"
                     android:id="@+id/genderswitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

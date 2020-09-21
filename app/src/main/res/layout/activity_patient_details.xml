@@ -12,21 +12,37 @@
         android:layout_height="55dp"
         android:background="#ffffff">
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
-            android:onClick="close"
-            android:src="@drawable/back_icon" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/titlename"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/medium"
-            android:text="Patient Name"
-            android:textColor="@color/colorBlack"
-            android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/backbtn"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:onClick="close"
+                android:src="@drawable/back_icon" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/backbtn"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/medium"
+                android:text="Patient Details"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_marginRight="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:onClick="deletePatient"
+                android:src="@drawable/delete_icon" />
+        </RelativeLayout>
 
     </com.google.android.material.appbar.MaterialToolbar>
 

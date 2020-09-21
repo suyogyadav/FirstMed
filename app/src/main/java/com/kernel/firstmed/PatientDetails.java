@@ -51,7 +51,7 @@ public class PatientDetails extends AppCompatActivity {
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
         pagerAdapter.addFragments(new NoRecordFragment(), "MEDICINE");
         pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
-        pagerAdapter.addFragments(new NoRecordFragment(), "DEBT");
+        pagerAdapter.addFragments(new DebtFragment(rowId,this), "DEBT");
         viewPager.setAdapter(pagerAdapter);
     }
 
@@ -78,7 +78,7 @@ public class PatientDetails extends AppCompatActivity {
             ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
             pagerAdapter.addFragments(new NoRecordFragment(), "MEDICINE");
             pagerAdapter.addFragments(new NoRecordFragment(), "DISEASE");
-            pagerAdapter.addFragments(new NoRecordFragment(), "DEBT");
+            pagerAdapter.addFragments(new DebtFragment(rowId,this), "DEBT");
             viewPager.setAdapter(pagerAdapter);
         }
 
@@ -92,5 +92,11 @@ public class PatientDetails extends AppCompatActivity {
         Intent intent = new Intent(this, NewBill.class);
         intent.putExtra("rowId", getIntent().getLongExtra("rowId", 0));
         startActivity(intent);
+    }
+
+    public void deletePatient(View view) {
+        FirstMedDatabase db = new FirstMedDatabase(this);
+        db.deletePatient(getIntent().getLongExtra("rowId", 0));
+        finish();
     }
 }
