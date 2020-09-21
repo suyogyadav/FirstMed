@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MedicineData">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/MedicineListAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#ffffff">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/backbtn"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:onClick="close"
+                android:src="@drawable/back_icon" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/backbtn"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/medium"
+                android:text="Search Medicines"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:layout_marginRight="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:onClick="addMedicine"
+                android:src="@drawable/add_icon" />
+        </RelativeLayout>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchbar"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="250dp"
+        android:layout_height="54dp"
+        android:layout_below="@id/MedicineListAppBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/MedicineSearchBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Search Here"
+            android:paddingStart="12dp"
+            android:paddingEnd="8dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/searchbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchbar"
+        android:layout_centerHorizontal="true"
+        android:onClick="sarchBtn"
+        android:text="Search" />
+
+    <TextView
+        android:id="@+id/recenttext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchbtn"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/medium"
+        android:text="Medicine List"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/MedicineList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/recenttext"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center" />
+
+</RelativeLayout>
