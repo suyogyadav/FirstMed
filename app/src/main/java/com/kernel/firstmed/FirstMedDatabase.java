@@ -328,6 +328,19 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateMedicineName(String oldName,String newName)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(MedicineListTable.MEDICINE_NAME,newName);
+
+        String selection = MedicineListTable.MEDICINE_NAME+" LIKE ?";
+        String[] selectionArgs = {oldName};
+
+        db.update(MedicineListTable.TABLE_NAME,values,selection,selectionArgs);
+        db.close();
+    }
+
     private String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();

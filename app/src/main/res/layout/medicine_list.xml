@@ -23,7 +23,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="7">
+        android:layout_weight="6">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/MedicineName"
@@ -35,6 +35,23 @@
             android:text="Medicine Name"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/editbtn"
+            android:background="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/edit_icon" />
 
     </RelativeLayout>
 

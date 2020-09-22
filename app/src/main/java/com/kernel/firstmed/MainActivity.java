@@ -30,4 +30,8 @@ public class MainActivity extends AppCompatActivity {
     public void Medicine(View view) {
         startActivity(new Intent(this,MedicineData.class));
     }
+
+    public void BackupRestore(View view) {
+        startActivity(new Intent(this,BackupRestore.class));
+    }
 }
