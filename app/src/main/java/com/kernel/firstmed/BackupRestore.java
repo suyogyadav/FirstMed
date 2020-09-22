@@ -36,4 +36,8 @@ public class BackupRestore extends AppCompatActivity {
         output.close();
         fis.close();
     }
+
+    public void close(View view) {
+        finish();
+    }
 }
