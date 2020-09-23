@@ -61,4 +61,8 @@ public class MainActivity extends AppCompatActivity {
         month.setText(""+db.getMonthCount(getDateTime()));
         total.setText(""+db.getPatientCount());
     }
+
+    public void Reports(View view) {
+        startActivity(new Intent(this,ReportActivity.class));
+    }
 }
