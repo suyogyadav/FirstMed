@@ -21,8 +21,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class NewBill extends AppCompatActivity {
 
@@ -112,6 +115,7 @@ public class NewBill extends AppCompatActivity {
         builder.setTitle("Payment Method");
         View alertLayouyt = getLayoutInflater().inflate(R.layout.alert_dialoge_custom_layout, null);
         final TextInputEditText amount = alertLayouyt.findViewById(R.id.edtamount);
+        amount.requestFocus();
         final ChipGroup cashGroup = alertLayouyt.findViewById(R.id.cashchipgroup);
         builder.setView(alertLayouyt);
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
@@ -126,6 +130,7 @@ public class NewBill extends AppCompatActivity {
                     FirstMedDatabase db = new FirstMedDatabase(context);
                     db.addMedicine(meds, getIntent().getLongExtra("rowId", 0), diseaseName.getText().toString());
                     switchAction(cashGroup.getCheckedChipId(), Integer.parseInt(amount.getText().toString()));
+                    db.addCount(getDateTime(),1);
                 }
             }
         });
@@ -152,6 +157,7 @@ public class NewBill extends AppCompatActivity {
                 break;
         }
         startActivity(new Intent(this,MainActivity.class));
+        finish();
     }
 
     public String getmeds() {
@@ -169,6 +175,12 @@ public class NewBill extends AppCompatActivity {
         }
         med = med + abcd;
         return med;
+    }
+
+    public String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date).split(" ")[0];
     }
 
     public void close(View view) {

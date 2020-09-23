@@ -54,10 +54,19 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                         + MedicineListTable._ID + " INTEGER PRIMARY KEY, "
                         + MedicineListTable.MEDICINE_NAME + " TEXT NOT NULL)";
 
+        final String CREATE_PATIENT_COUNT_TABLE =
+                "CREATE TABLE IF NOT EXISTS " + PatientCountTable.TABLE_NAME + " ("
+                        + PatientCountTable._ID + " INTEGER PRIMARY KEY, "
+                        + PatientCountTable.YEAR_COLUMN + " TEXT NOT NULL, "
+                        + PatientCountTable.MONTH_COLUMN + " TEXT NOT NULL, "
+                        + PatientCountTable.DATE_COLUMN + " TEXT NOT NULL, "
+                        + PatientCountTable.COUNT_COLUMN + " TEXT NOT NULL)";
+
         db.execSQL(CREATE_PATIENT_TABLE);
         db.execSQL(CREATE_MEDICINE_TABLE);
         db.execSQL(CREATE_DEPT_HISTORY_TABLE);
         db.execSQL(CREATE_MEDICINE_LIST_TABLE);
+        db.execSQL(CREATE_PATIENT_COUNT_TABLE);
     }
 
     @Override
@@ -114,6 +123,35 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return false;
+    }
+
+
+    public void addCount(String date, int count) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String year = date.split("-")[0];
+        String month = date.split("-")[1];
+        String day = date.split("-")[2];
+
+        String[] projection = {PatientCountTable.YEAR_COLUMN, PatientCountTable.MONTH_COLUMN, PatientCountTable.DATE_COLUMN, PatientCountTable.COUNT_COLUMN};
+        String selection = PatientCountTable.DATE_COLUMN + " =? ";
+        String[] selectionArgs = {day};
+
+        Cursor cursor = db.query(PatientCountTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+        if (cursor.moveToFirst()) {
+            ContentValues values = new ContentValues();
+            values.put(PatientCountTable.COUNT_COLUMN, Integer.parseInt(cursor.getString(3)) + count);
+            db.update(PatientCountTable.TABLE_NAME, values, selection, selectionArgs);
+        } else {
+            ContentValues values = new ContentValues();
+            values.put(PatientCountTable.YEAR_COLUMN, year);
+            values.put(PatientCountTable.MONTH_COLUMN, month);
+            values.put(PatientCountTable.DATE_COLUMN, day);
+            values.put(PatientCountTable.COUNT_COLUMN, "" + 1);
+            db.insert(PatientCountTable.TABLE_NAME, null, values);
+        }
+        cursor.close();
+        db.close();
     }
 
     public void addDebt(long rowId, int amount) {
@@ -302,42 +340,89 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         return debtHistory;
     }
 
-    public void deletePatient(long rowId)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String selection = PatientTable._ID+" LIKE ?";
-        String[] selectionArgs = {""+rowId};
+    public int getDayCount(String date) {
 
-        db.delete(PatientTable.TABLE_NAME,selection,selectionArgs);
+        SQLiteDatabase db = getReadableDatabase();
+
+        String year = date.split("-")[0];
+        String month = date.split("-")[1];
+        String day = date.split("-")[2];
+
+        String[] projection = {PatientCountTable.YEAR_COLUMN, PatientCountTable.MONTH_COLUMN, PatientCountTable.DATE_COLUMN, PatientCountTable.COUNT_COLUMN};
+        String selection = PatientCountTable.YEAR_COLUMN + " =? " + "AND " + PatientCountTable.MONTH_COLUMN + " =? " + "AND " + PatientCountTable.DATE_COLUMN + " =? ";
+        String[] selectionArgs = {year, month, day};
+
+        Cursor cursor = db.query(PatientCountTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+        if (cursor.moveToFirst()) {
+            return Integer.parseInt(cursor.getString(3));
+        } else {
+            return 0;
+        }
+    }
+
+    public int getMonthCount(String date) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT " + PatientCountTable.MONTH_COLUMN + ", COUNT(" + PatientCountTable.COUNT_COLUMN + ") FROM " + PatientCountTable.TABLE_NAME + " GROUP BY " + PatientCountTable.MONTH_COLUMN;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                if (cursor.getString(0).equals(date.split("-")[1])) {
+                    int cnt = Integer.parseInt(cursor.getString(1));
+                    cursor.close();
+                    db.close();
+                    return cnt;
+                }
+            } while (cursor.moveToNext());
+        }
+        return 0;
+    }
+
+    public int getPatientCount()
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {PatientTable.NAME_COLUMN};
+        Cursor cursor = db.query(PatientTable.TABLE_NAME,projection,null,null,null,null,null);
+        int cnt = cursor.getCount();
+        cursor.close();
+        db.close();
+        return cnt;
+    }
+
+    public void deletePatient(long rowId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selection = PatientTable._ID + " LIKE ?";
+        String[] selectionArgs = {"" + rowId};
+
+        db.delete(PatientTable.TABLE_NAME, selection, selectionArgs);
 
         selection = MedicineTable.PATIENT_ID_COLUMN + " LIKE ?";
-        db.delete(MedicineTable.TABLE_NAME,selection,selectionArgs);
+        db.delete(MedicineTable.TABLE_NAME, selection, selectionArgs);
 
         selection = DeptHistoryTable.PATIENT_ID_COLUMN + " LIKE ?";
-        db.delete(DeptHistoryTable.TABLE_NAME,selection,selectionArgs);
+        db.delete(DeptHistoryTable.TABLE_NAME, selection, selectionArgs);
         db.close();
     }
 
-    public void deleteMedicine(String name)
-    {
+    public void deleteMedicine(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String selection = MedicineListTable.MEDICINE_NAME+" LIKE ?";
+        String selection = MedicineListTable.MEDICINE_NAME + " LIKE ?";
         String[] selectionArgs = {name};
-        int deleted = db.delete(MedicineListTable.TABLE_NAME,selection,selectionArgs);
-        Log.i("abgd",""+deleted);
+        int deleted = db.delete(MedicineListTable.TABLE_NAME, selection, selectionArgs);
+        Log.i("abgd", "" + deleted);
         db.close();
     }
 
-    public void updateMedicineName(String oldName,String newName)
-    {
+    public void updateMedicineName(String oldName, String newName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(MedicineListTable.MEDICINE_NAME,newName);
+        values.put(MedicineListTable.MEDICINE_NAME, newName);
 
-        String selection = MedicineListTable.MEDICINE_NAME+" LIKE ?";
+        String selection = MedicineListTable.MEDICINE_NAME + " LIKE ?";
         String[] selectionArgs = {oldName};
 
-        db.update(MedicineListTable.TABLE_NAME,values,selection,selectionArgs);
+        db.update(MedicineListTable.TABLE_NAME, values, selection, selectionArgs);
         db.close();
     }
 
@@ -376,5 +461,13 @@ class FirstMedDatabase extends SQLiteOpenHelper {
     public static class MedicineListTable implements BaseColumns {
         public static final String TABLE_NAME = "Medicine_List_Table";
         public static final String MEDICINE_NAME = "MedicineName";
+    }
+
+    public static class PatientCountTable implements BaseColumns {
+        public static final String TABLE_NAME = "Patient_Count_Table";
+        public static final String YEAR_COLUMN = "Year";
+        public static final String MONTH_COLUMN = "Month";
+        public static final String DATE_COLUMN = "Date";
+        public static final String COUNT_COLUMN = "Count";
     }
 }

@@ -64,6 +64,7 @@ public class DebtFragment extends Fragment {
                 builder.setTitle("Add Amount");
                 View alertLayout = getLayoutInflater().inflate(R.layout.alert_layout, null);
                 final TextInputEditText amount = alertLayout.findViewById(R.id.amountTEXT);
+                amount.setHint("Amount");
                 builder.setView(alertLayout);
                 builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     @Override
