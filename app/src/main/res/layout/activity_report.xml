@@ -29,10 +29,54 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/barChart"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dropdown"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/ReportAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:hint="Timeline">
 
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Timeline"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ReportAppBar"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="showHistory"
+        android:src="@drawable/history_icon" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/dropdown"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="8" />
+
+    </LinearLayout>
 </RelativeLayout>

@@ -361,14 +361,13 @@ class FirstMedDatabase extends SQLiteOpenHelper {
     }
 
     public int getMonthCount(String date) {
-
         SQLiteDatabase db = getReadableDatabase();
-        String query = "SELECT " + PatientCountTable.MONTH_COLUMN + ", COUNT(" + PatientCountTable.COUNT_COLUMN + ") FROM " + PatientCountTable.TABLE_NAME + " GROUP BY " + PatientCountTable.MONTH_COLUMN;
+        String query = "SELECT " + PatientCountTable.MONTH_COLUMN + ", SUM(" + PatientCountTable.COUNT_COLUMN + ") FROM " + PatientCountTable.TABLE_NAME + " GROUP BY " + PatientCountTable.MONTH_COLUMN;
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
-                if (cursor.getString(0).equals(date.split("-")[1])) {
+                if (cursor.getString(0).equals(date)) {
                     int cnt = Integer.parseInt(cursor.getString(1));
                     cursor.close();
                     db.close();
@@ -379,35 +378,100 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         return 0;
     }
 
-    public List<ChartData> getChartData()
-    {
+    public int getYearCount(String date) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT " + PatientCountTable.YEAR_COLUMN + ", SUM(" + PatientCountTable.COUNT_COLUMN + ") FROM " + PatientCountTable.TABLE_NAME + " GROUP BY " + PatientCountTable.YEAR_COLUMN;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                if (cursor.getString(0).equals(date)) {
+                    int cnt = Integer.parseInt(cursor.getString(1));
+                    cursor.close();
+                    db.close();
+                    return cnt;
+                }
+            } while (cursor.moveToNext());
+        }
+        return 0;
+    }
+
+    public List<ChartData> getChartData(String timeline) {
         SQLiteDatabase db = getReadableDatabase();
         List<ChartData> data = new ArrayList<>();
-        String[] projection = {PatientCountTable.DATE_COLUMN,PatientCountTable.COUNT_COLUMN};
-        String selection = PatientCountTable.MONTH_COLUMN + " =? ";
-        String[] selectionArgs = {""+getDateTime().split( "-")[1]};
-        Cursor cursor = db.query(PatientCountTable.TABLE_NAME,projection,selection,selectionArgs,null,null,null);
-        if (cursor.moveToNext())
-        {
-            do {
-                ChartData chartData = new ChartData();
-                chartData.setDate(cursor.getString(0));
-                chartData.setCount(cursor.getString(1));
-                data.add(chartData);
-            }while (cursor.moveToNext());
 
-            cursor.close();
-            db.close();
-            return data;
+        if (timeline.equals("Day")) {
+            String[] projection = {PatientCountTable.DATE_COLUMN, PatientCountTable.COUNT_COLUMN};
+            String selection = PatientCountTable.MONTH_COLUMN + " =? ";
+            String[] selectionArgs = {"" + getDateTime().split("-")[1]};
+            Cursor cursor = db.query(PatientCountTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+            if (cursor.moveToNext()) {
+                do {
+                    ChartData chartData = new ChartData();
+                    chartData.setDate(cursor.getString(0));
+                    chartData.setCount(cursor.getString(1));
+                    data.add(chartData);
+                } while (cursor.moveToNext());
+
+                cursor.close();
+                db.close();
+                return data;
+            }
+        }
+
+        if (timeline.equals("Month"))
+        {
+            String year = getDateTime().split("-")[0];
+            Cursor cursor = db.rawQuery("SELECT DISTINCT " + PatientCountTable.MONTH_COLUMN + " FROM " + PatientCountTable.TABLE_NAME + " WHERE " + PatientCountTable.YEAR_COLUMN + " = " + year, null);
+            if (cursor.moveToFirst())
+            {
+                do {
+                    ChartData chartData = new ChartData();
+                    chartData.setDate(cursor.getString(0));
+                    chartData.setCount(""+getMonthCount(cursor.getString(0)));
+                    data.add(chartData);
+                }while (cursor.moveToNext());
+                return data;
+            }
+        }
+
+        if (timeline.equals("Month"))
+        {
+            String year = getDateTime().split("-")[0];
+            Cursor cursor = db.rawQuery("SELECT DISTINCT " + PatientCountTable.MONTH_COLUMN + " FROM " + PatientCountTable.TABLE_NAME + " WHERE " + PatientCountTable.YEAR_COLUMN + " = " + year, null);
+            if (cursor.moveToFirst())
+            {
+                do {
+                    ChartData chartData = new ChartData();
+                    chartData.setDate(cursor.getString(0));
+                    chartData.setCount(""+getMonthCount(cursor.getString(0)));
+                    data.add(chartData);
+                }while (cursor.moveToNext());
+                return data;
+            }
+        }
+
+        if (timeline.equals("Year"))
+        {
+            Cursor cursor = db.rawQuery("SELECT DISTINCT " + PatientCountTable.YEAR_COLUMN + " FROM " + PatientCountTable.TABLE_NAME, null);
+            if (cursor.moveToFirst())
+            {
+                do {
+                    ChartData chartData = new ChartData();
+                    chartData.setDate(cursor.getString(0));
+                    chartData.setCount(""+getYearCount(cursor.getString(0)));
+                    data.add(chartData);
+                }while (cursor.moveToNext());
+                return data;
+            }
         }
         return data;
     }
 
-    public int getPatientCount()
-    {
+    public int getPatientCount() {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {PatientTable.NAME_COLUMN};
-        Cursor cursor = db.query(PatientTable.TABLE_NAME,projection,null,null,null,null,null);
+        Cursor cursor = db.query(PatientTable.TABLE_NAME, projection, null, null, null, null, null);
         int cnt = cursor.getCount();
         cursor.close();
         db.close();

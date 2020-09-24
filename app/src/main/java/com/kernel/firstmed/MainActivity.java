@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         FirstMedDatabase db = new FirstMedDatabase(this);
         today.setText(""+db.getDayCount(getDateTime()));
-        month.setText(""+db.getMonthCount(getDateTime()));
+        month.setText(""+db.getMonthCount(getDateTime().split("-")[1]));
         total.setText(""+db.getPatientCount());
     }
 
