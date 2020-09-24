@@ -3,6 +3,7 @@ package com.kernel.firstmed;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -102,6 +103,6 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     public void showHistory(View view) {
-
+        startActivity(new Intent(this,HistoryActivity.class));
     }
 }

@@ -1,12 +1,11 @@
 package com.kernel.firstmed;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Switch;
+
 
 import com.google.android.material.textview.MaterialTextView;
 
