@@ -379,6 +379,30 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         return 0;
     }
 
+    public List<ChartData> getChartData()
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        List<ChartData> data = new ArrayList<>();
+        String[] projection = {PatientCountTable.DATE_COLUMN,PatientCountTable.COUNT_COLUMN};
+        String selection = PatientCountTable.MONTH_COLUMN + " =? ";
+        String[] selectionArgs = {""+getDateTime().split( "-")[1]};
+        Cursor cursor = db.query(PatientCountTable.TABLE_NAME,projection,selection,selectionArgs,null,null,null);
+        if (cursor.moveToNext())
+        {
+            do {
+                ChartData chartData = new ChartData();
+                chartData.setDate(cursor.getString(0));
+                chartData.setCount(cursor.getString(1));
+                data.add(chartData);
+            }while (cursor.moveToNext());
+
+            cursor.close();
+            db.close();
+            return data;
+        }
+        return data;
+    }
+
     public int getPatientCount()
     {
         SQLiteDatabase db = getReadableDatabase();
