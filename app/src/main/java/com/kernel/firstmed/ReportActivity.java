@@ -19,8 +19,11 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ReportActivity extends AppCompatActivity {
 
@@ -39,7 +42,7 @@ public class ReportActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.menu_popup, timeline);
         textView.setAdapter(adapter);
         textView.setText("Weekly", false);
-        List<ChartData> chartData = db.getChartData("Day");
+        List<ChartData> chartData = db.getChartData("Day",getDateTime().split("-")[0]);
         List<BarEntry> barEntries = new ArrayList<>();
 
         for (int i = 0; i < chartData.size(); i++) {
@@ -79,7 +82,7 @@ public class ReportActivity extends AppCompatActivity {
 
     private void setData(String time) {
         FirstMedDatabase db = new FirstMedDatabase(context);
-        List<ChartData> chartData = db.getChartData(time);
+        List<ChartData> chartData = db.getChartData(time,getDateTime().split("-")[0]);
         List<BarEntry> barEntries = new ArrayList<>();
 
         for (int i = 0; i < chartData.size(); i++) {
@@ -100,6 +103,12 @@ public class ReportActivity extends AppCompatActivity {
 
     public void close(View view) {
         finish();
+    }
+
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date).split(" ")[0];
     }
 
     public void showHistory(View view) {

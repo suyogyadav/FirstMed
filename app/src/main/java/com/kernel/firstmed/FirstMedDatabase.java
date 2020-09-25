@@ -396,7 +396,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
         return 0;
     }
 
-    public List<ChartData> getChartData(String timeline) {
+    public List<ChartData> getChartData(String timeline,String Year) {
         SQLiteDatabase db = getReadableDatabase();
         List<ChartData> data = new ArrayList<>();
 
@@ -421,8 +421,7 @@ class FirstMedDatabase extends SQLiteOpenHelper {
 
         if (timeline.equals("Month"))
         {
-            String year = getDateTime().split("-")[0];
-            Cursor cursor = db.rawQuery("SELECT DISTINCT " + PatientCountTable.MONTH_COLUMN + " FROM " + PatientCountTable.TABLE_NAME + " WHERE " + PatientCountTable.YEAR_COLUMN + " = " + year, null);
+            Cursor cursor = db.rawQuery("SELECT DISTINCT " + PatientCountTable.MONTH_COLUMN + " FROM " + PatientCountTable.TABLE_NAME + " WHERE " + PatientCountTable.YEAR_COLUMN + " = " + Year, null);
             if (cursor.moveToFirst())
             {
                 do {
@@ -431,22 +430,9 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                     chartData.setCount(""+getMonthCount(cursor.getString(0)));
                     data.add(chartData);
                 }while (cursor.moveToNext());
-                return data;
-            }
-        }
 
-        if (timeline.equals("Month"))
-        {
-            String year = getDateTime().split("-")[0];
-            Cursor cursor = db.rawQuery("SELECT DISTINCT " + PatientCountTable.MONTH_COLUMN + " FROM " + PatientCountTable.TABLE_NAME + " WHERE " + PatientCountTable.YEAR_COLUMN + " = " + year, null);
-            if (cursor.moveToFirst())
-            {
-                do {
-                    ChartData chartData = new ChartData();
-                    chartData.setDate(cursor.getString(0));
-                    chartData.setCount(""+getMonthCount(cursor.getString(0)));
-                    data.add(chartData);
-                }while (cursor.moveToNext());
+                cursor.close();
+                db.close();
                 return data;
             }
         }
@@ -462,19 +448,21 @@ class FirstMedDatabase extends SQLiteOpenHelper {
                     chartData.setCount(""+getYearCount(cursor.getString(0)));
                     data.add(chartData);
                 }while (cursor.moveToNext());
+                cursor.close();
+                db.close();
                 return data;
             }
         }
         return data;
     }
 
-    public List<ChartData> getDayData(String month) {
+    public List<ChartData> getDayData(String month,String Year) {
         SQLiteDatabase db = getReadableDatabase();
         List<ChartData> data = new ArrayList<>();
 
         String[] projection = {PatientCountTable.DATE_COLUMN, PatientCountTable.COUNT_COLUMN};
-        String selection = PatientCountTable.MONTH_COLUMN + " =? ";
-        String[] selectionArgs = {month};
+        String selection = PatientCountTable.MONTH_COLUMN + " =? "+" AND " +PatientCountTable.YEAR_COLUMN + " =? ";
+        String[] selectionArgs = {month,Year};
         Cursor cursor = db.query(PatientCountTable.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
 
         if (cursor.moveToNext()) {

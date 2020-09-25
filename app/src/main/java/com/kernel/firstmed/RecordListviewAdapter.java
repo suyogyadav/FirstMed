@@ -66,13 +66,13 @@ class RecordListviewAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.expandable_list_parent, null);
         }
         MaterialTextView dateView = convertView.findViewById(R.id.expandable_date);
-        dateView.setText(month);
+        dateView.setText(getDateFormated(month));
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        String day = (String) getChild(groupPosition,childPosition);
+        String day = (String) getChild(groupPosition, childPosition);
         String datetext = day.split("_n")[0];
         String counttext = day.split("_n")[1];
 
@@ -82,6 +82,7 @@ class RecordListviewAdapter extends BaseExpandableListAdapter {
         }
         MaterialTextView date = convertView.findViewById(R.id.date);
         MaterialTextView count = convertView.findViewById(R.id.count);
+        counttext = "Count : " + counttext;
         date.setText(datetext);
         count.setText(counttext);
         return convertView;
@@ -91,4 +92,47 @@ class RecordListviewAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+    private String getDateFormated(String date) {
+        switch (Integer.parseInt(date)) {
+            case 1:
+                date = " January ";
+                break;
+            case 2:
+                date = " February ";
+                break;
+            case 3:
+                date = " March ";
+                break;
+            case 4:
+                date = " April ";
+                break;
+            case 5:
+                date = " May ";
+                break;
+            case 6:
+                date = " June ";
+                break;
+            case 7:
+                date = " July ";
+                break;
+            case 8:
+                date = " August ";
+                break;
+            case 9:
+                date = " September ";
+                break;
+            case 10:
+                date = " October ";
+                break;
+            case 11:
+                date = " November ";
+                break;
+            case 12:
+                date = " December ";
+                break;
+        }
+        return date;
+    }
+
 }
