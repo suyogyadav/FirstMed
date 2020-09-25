@@ -124,7 +124,7 @@
                     android:layout_marginHorizontal="10dp">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtdes"
+                        android:id="@+id/edtsubject"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/light"
@@ -150,6 +150,7 @@
                 android:layout_margin="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtdis"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -168,6 +169,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:onClick="printJob"
         android:src="@drawable/print_icon"
         app:backgroundTint="@color/colorPrimary"
         android:layout_alignParentEnd="true"

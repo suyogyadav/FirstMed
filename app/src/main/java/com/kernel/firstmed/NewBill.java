@@ -9,7 +9,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintJob;
+import android.print.PrintManager;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
@@ -42,6 +48,7 @@ public class NewBill extends AppCompatActivity {
     private Chip afternoon;
     private Chip night;
     private Context context;
+    private WebView parentWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,7 @@ public class NewBill extends AppCompatActivity {
         context = this;
         FirstMedDatabase db = new FirstMedDatabase(this);
         setContentView(R.layout.activity_new_bill);
+        parentWebView = new WebView(this);
         diseaseName = findViewById(R.id.edtdes);
         medicineName = findViewById(R.id.edtmed);
         qty = findViewById(R.id.edtqty);
@@ -156,8 +164,8 @@ public class NewBill extends AppCompatActivity {
                 Toast.makeText(this, "Deducted from Debt", Toast.LENGTH_SHORT).show();
                 break;
         }
+        printReciept();
         startActivity(new Intent(this,MainActivity.class));
-        finish();
     }
 
     public String getmeds() {
@@ -181,6 +189,58 @@ public class NewBill extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
         return dateFormat.format(date).split(" ")[0];
+    }
+
+    private void printReciept()
+    {
+        long rowId = getIntent().getLongExtra("rowId", 0);
+        WebView webView = new WebView(context);
+        webView.setWebViewClient(new WebViewClient(){
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                createWebPrintJob(view);
+                parentWebView = null;
+            }
+        });
+        FirstMedDatabase db = new FirstMedDatabase(this);
+        List<MedicinePOJO> medicinePOJOS = db.getMedicine(rowId);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < medicinePOJOS.get(0).getOld_med().size(); i++) {
+            builder.append("<tr>")
+                    .append("<td style=\"width:45%\">")
+                    .append((medicinePOJOS.get(0).getOld_med().get(i)).split("_n")[0])
+                    .append("</td>")
+                    .append("<td style=\"width:10%\">")
+                    .append((medicinePOJOS.get(0).getOld_med().get(i)).split("_n")[1])
+                    .append("</td>")
+                    .append("<td style=\"width:45%\">")
+                    .append((medicinePOJOS.get(0).getOld_med().get(i)).split("_n")[2])
+                    .append("</td>")
+                    .append("</tr>");
+        }
+
+        String beforname = "<table style=\"width:100%\"><tr><td style=\"width:70%\"><span style=\"font-weight: bold;\">Patient Name : </span>";
+        String befordate = "</td><td style=\"width:30%\"><span style=\"font-weight: bold;\">Date : </span>";
+        String afterdate = "</td></tr></table>";
+        String TableHeader = "<tr><th>Medicine</th><th>Qty</th><th>Time</th></tr>";
+        String footer = "<div style=\"position: absolute; bottom: 0; right: 0; width: 50%; text-align:right; font-weight: bold;\">Dr.Suyog Yadav</div>";
+        String PatientName = db.getSinglePatient(medicinePOJOS.get(0).getPid()).getName();
+        String Date = getDateTime();
+        String htmlDocument = "<html><head><style>th, td {padding: 5px;text-align: left;}</style></head><body><h1>Dr. Suyog Yadav</h1><h3>MBBS</h3><p>550/5, East side Of S.T.Stand ,</br>M.P.Patil Hospital Road , Sangli</br>Phone - 8806035350</p><hr>"+beforname+PatientName+befordate+Date+afterdate+"</br><table style=\"width:100%\">"+ TableHeader + builder.toString() + "</table>"+footer+"</body></html>";
+
+        webView.loadDataWithBaseURL(null, htmlDocument, "text/HTML", "UTF-8", null);
+        parentWebView = webView;
+    }
+
+    private void createWebPrintJob(View view) {
+        PrintManager manager = (PrintManager) this.getSystemService(Context.PRINT_SERVICE);
+        String jobName = getString(R.string.app_name) + "Document";
+        PrintDocumentAdapter adapter = parentWebView.createPrintDocumentAdapter(jobName);
+        PrintJob printJob = manager.print(jobName, adapter,
+                new PrintAttributes.Builder().build());
     }
 
     public void close(View view) {
