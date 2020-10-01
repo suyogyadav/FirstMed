@@ -210,7 +210,7 @@ public class NewBill extends AppCompatActivity {
         });
         FirstMedDatabase db = new FirstMedDatabase(this);
         List<MedicinePOJO> medicinePOJOS = db.getMedicine(rowId);
-        Collections.reverse(medicinePOJOS);
+//        Collections.reverse(medicinePOJOS);
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < medicinePOJOS.get(0).getOld_med().size(); i++) {
             builder.append("<tr>")
