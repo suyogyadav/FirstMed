@@ -1,7 +1,6 @@
 package com.kernel.firstmed;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.print.PrintHelper;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,12 +13,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
+
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class PrescriptionActivity extends AppCompatActivity {
@@ -49,6 +46,7 @@ public class PrescriptionActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 return false;
             }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 createWebPrintJob(view);
@@ -62,10 +60,10 @@ public class PrescriptionActivity extends AppCompatActivity {
         String footer = "<div style=\"position: absolute; bottom: 0; right: 0; width: 50%; text-align:right; font-weight: bold;\">Dr.Suyog Yadav</div>";
         String PatientName = patientName.getText().toString();
         String subjecttext = subject.getText().toString();
-        String subjecthtml = "<p><span style=\"font-weight: bold;\">Subject : </span>"+subjecttext+"</p>";
+        String subjecthtml = "<p><span style=\"font-weight: bold;\">Subject : </span>" + subjecttext + "</p>";
         String Date = getDateTime();
-        String Dis = discription.getText().toString().replaceAll("/n","</br>");
-        String htmlDocument = "<html><head><style>th, td {padding: 5px;text-align: left;}</style></head><body><h1>Dr. Suyog Yadav</h1><h3>MBBS</h3><p>550/5, East side Of S.T.Stand ,</br>M.P.Patil Hospital Road , Sangli</br>Phone - 8806035350</p><hr>"+beforname+PatientName+befordate+Date+afterdate+"</br>"+subjecthtml+"</br><p>"+Dis+"</p>"+footer+"</body></html>";
+        String Dis = discription.getText().toString().replaceAll("/n", "</br>");
+        String htmlDocument = "<html><head><style>th, td {padding: 5px;text-align: left;}</style></head><body><h1>Dr. Suyog Yadav</h1><h3>MBBS</h3><p>550/5, East side Of S.T.Stand ,</br>M.P.Patil Hospital Road , Sangli</br>Phone - 8806035350</p><hr>" + beforname + PatientName + befordate + Date + afterdate + "</br>" + subjecthtml + "</br><p>" + Dis + "</p>" + footer + "</body></html>";
         webView.loadDataWithBaseURL(null, htmlDocument, "text/HTML", "UTF-8", null);
         parentWebView = webView;
     }
