@@ -2,6 +2,7 @@ package com.kernel.firstmed;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,7 @@ class MedicineListAdapter extends RecyclerView.Adapter<MedicineListAdapter.Medic
                     View alertView = View.inflate(context,R.layout.alert_layout,null);
                     final TextInputEditText text = alertView.findViewById(R.id.amountTEXT);
                     text.setText(medicineList.get(getAdapterPosition()));
+                    text.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
                     text.requestFocus();
                     builder.setView(alertView);
                     builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {

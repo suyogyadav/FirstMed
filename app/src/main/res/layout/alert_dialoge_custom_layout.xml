@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/light"
             android:hint="Amount"
-            android:inputType="textPersonName" />
+            android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

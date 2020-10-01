@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecordActivity"></activity>
+        <activity android:name=".RecordActivity"/>
         <activity android:name=".HistoryActivity" />
         <activity android:name=".ReportActivity" />
         <activity android:name=".BackupRestore" />
@@ -24,7 +24,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".NewBill"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:noHistory="true"/>
         <activity android:name=".PatientDetails" />
         <activity
             android:name=".AddPatient"

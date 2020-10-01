@@ -29,6 +29,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -165,7 +166,9 @@ public class NewBill extends AppCompatActivity {
                 break;
         }
         printReciept();
-        startActivity(new Intent(this,MainActivity.class));
+        Intent i = new Intent(this,MainActivity.class);
+        i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(i);
     }
 
     public String getmeds() {
@@ -207,6 +210,7 @@ public class NewBill extends AppCompatActivity {
         });
         FirstMedDatabase db = new FirstMedDatabase(this);
         List<MedicinePOJO> medicinePOJOS = db.getMedicine(rowId);
+        Collections.reverse(medicinePOJOS);
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < medicinePOJOS.get(0).getOld_med().size(); i++) {
             builder.append("<tr>")

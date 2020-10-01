@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -95,6 +96,8 @@ public class MedicineData extends AppCompatActivity {
         View alertView = getLayoutInflater().inflate(R.layout.alert_layout,null);
         final TextInputEditText name = alertView.findViewById(R.id.amountTEXT);
         name.setHint("Medicine Name");
+        name.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        name.requestFocus();
         builder.setView(alertView);
         builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
             @Override

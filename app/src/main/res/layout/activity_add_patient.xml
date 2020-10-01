@@ -124,12 +124,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/agelay"
             android:layout_marginTop="10dp"
-            android:weightSum="4">
+            android:weightSum="7">
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="2.5">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/gendertxt"
@@ -146,7 +146,7 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="2">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/femaletxt"
@@ -163,7 +163,7 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1.5">
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:checked="true"
