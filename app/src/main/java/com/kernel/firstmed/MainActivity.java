@@ -40,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Medicine(View view) {
-        startActivity(new Intent(this,MedicineData.class));
+        startActivity(new Intent(this, MedicineData.class));
     }
 
     public void BackupRestore(View view) {
-        startActivity(new Intent(this,BackupRestore.class));
+        startActivity(new Intent(this, BackupRestore.class));
     }
 
     private String getDateTime() {
@@ -57,12 +57,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         FirstMedDatabase db = new FirstMedDatabase(this);
-        today.setText(""+db.getDayCount(getDateTime()));
-        month.setText(""+db.getMonthCount(getDateTime().split("-")[1]));
-        total.setText(""+db.getPatientCount());
+        String tday = "" + db.getDayCount(getDateTime());
+        String mnth = "" + db.getMonthCount(getDateTime().split("-")[1]);
+        String ttl = "" + db.getPatientCount();
+        today.setText(tday);
+        month.setText(mnth);
+        total.setText(ttl);
     }
 
     public void Reports(View view) {
-        startActivity(new Intent(this,ReportActivity.class));
+        startActivity(new Intent(this, ReportActivity.class));
     }
 }
